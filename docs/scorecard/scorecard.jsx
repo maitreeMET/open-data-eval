@@ -142,18 +142,7 @@ function TechStamp({ score, display, label }) {
   );
 }
 
-// ─── codec / audio stamp helpers ─────────────────────────────────
-function getCodecStamp(videoFormat) {
-  if (!videoFormat || videoFormat === "Not specified" || videoFormat === "Varies (per constituent dataset)") return null;
-  const vf = videoFormat.toLowerCase();
-  if (vf.includes("h.264") || vf.includes("h264") || vf.includes("avc"))
-    return { score: 1.0, display: "H.264" };
-  if (vf.includes("h.265") || vf.includes("h265") || vf.includes("hevc"))
-    return { score: 1.0, display: "H.265" };
-  if (vf.includes("proprietary"))
-    return { score: 0.5, display: "Prop." };
-  return null;
-}
+// ─── audio stamp helper ───────────────────────────────────────────
 function getAudioStamp(modalities) {
   if (!modalities || modalities.length === 0) return null;
   const has = modalities.includes("Audio");
@@ -433,7 +422,6 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
 
           <Section title="Technical" open={open.technical} onToggle={() => toggle("technical")}>
             {(() => {
-              const codecStamp = getCodecStamp(d.videoFormat);
               const audioStamp = getAudioStamp(d.modalities);
               return (
                 <div style={{ display:"flex", gap:16, paddingTop:4, flexWrap:"wrap" }}>
@@ -443,9 +431,6 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
                   <TechStamp score={d.res}
                     display={shortEdge != null ? `${shortEdge}p` : null}
                     label="Resolution" />
-                  {codecStamp && (
-                    <TechStamp score={codecStamp.score} display={codecStamp.display} label="Codec" />
-                  )}
                   {audioStamp && (
                     <TechStamp score={audioStamp.score} display={audioStamp.display} label="Audio" />
                   )}
