@@ -7,26 +7,30 @@ const DATA = window.SCORECARD_DATA || [];
 
 // ─── constants ───────────────────────────────────────────────────
 const USECASES = [
-  { key: "manip",    label: "Manipulation",       field: "manip"    },
-  { key: "actRecog", label: "Action recognition",  field: "actRecog" },
-  { key: "handPose", label: "Hand pose",           field: "handPose" },
-  { key: "nav",      label: "Navigation",          field: "nav"      },
-  { key: "robot",    label: "Robot policy",        field: "robot"    },
-  { key: "vla",      label: "VLA pretraining",     field: "vla"      },
+  {
+    key: "actRecog", label: "Action Recognition", field: "actRecog",
+    desc: "Temporal activity understanding — classifying and localizing actions in egocentric video",
+    profile: { critical:["RGB video"], important:["Audio","Narrations/captions","Optical flow"], bonus:["Eye gaze","Hand pose annotations","IMU"] },
+  },
+  {
+    key: "handObj", label: "Hand-Object Interaction", field: "handPose",
+    desc: "Hand pose, grasping, and manipulation analysis from first-person view",
+    profile: { critical:["RGB video","Hand pose annotations"], important:["Depth (RGB-D)","Depth (stereo)"], bonus:["Tactile","IMU","Force/torque"] },
+  },
+  {
+    key: "nav", label: "Navigation", field: "nav",
+    desc: "Navigation, 3D reconstruction, SLAM, and scene-level reasoning",
+    profile: { critical:["RGB video","IMU"], important:["Depth (RGB-D)","SLAM/odometry","3D point clouds"], bonus:["LiDAR","Depth (stereo)","Eye gaze"] },
+  },
 ];
-const UC_SHORT = { manip:"Manip", actRecog:"Action", handPose:"Hand", nav:"Nav", robot:"Robot", vla:"VLA" };
-const UC_KEY   = { manip:"manipulation", actRecog:"action_recognition",
-                   handPose:"hand_pose_estimation", nav:"navigation",
-                   robot:"robot_policy_learning", vla:"vla_pretraining" };
 
-const MODALITY_PROFILES = {
-  manipulation:          { critical:["RGB video","Depth"], important:["Hand pose annotations","Tactile","Force/torque","Narrations/captions","Proprioception","Gripper state"], bonus:["Audio","IMU","Optical flow","Object bounding boxes","End-effector pose","Segmentation masks"] },
-  action_recognition:    { critical:["RGB video"], important:["Audio","Narrations/captions","Optical flow"], bonus:["Eye gaze","Hand pose annotations","IMU","Object bounding boxes"] },
-  hand_pose_estimation:  { critical:["RGB video","Hand pose annotations"], important:["Depth","Stereo"], bonus:["Tactile","IMU","Segmentation masks"] },
-  navigation:            { critical:["RGB video","IMU"], important:["Depth","SLAM/odometry","3D point clouds"], bonus:["Audio","Stereo","LiDAR","Segmentation masks"] },
-  robot_policy_learning: { critical:["RGB video","Proprioception","Gripper state"], important:["Depth","End-effector pose","Narrations/captions","Force/torque"], bonus:["Tactile","Audio","Joint torques"] },
-  vla_pretraining:       { critical:["RGB video","Narrations/captions"], important:["Depth","Hand pose annotations","Proprioception"], bonus:["Audio","IMU","Eye gaze","SLAM/odometry","Optical flow"] },
-};
+const DIMS = [
+  { key: "technical",     label: "Technical",     compute: d => avg([d.fps, d.res]),  desc: "Frame rate and resolution quality" },
+  { key: "scale",         label: "Scale",         compute: d => d.scale,              desc: "Hours, environments, and participant diversity" },
+  { key: "annotation",    label: "Annotation",    compute: d => d.annCov,             desc: "Annotation coverage across the dataset" },
+  { key: "accessibility", label: "Accessibility", compute: d => avg([d.lic, d.acc]),  desc: "License clarity and ease of access" },
+  { key: "tooling",       label: "Tooling",       compute: d => avg([d.dl, d.doc]),   desc: "Dataloader support and documentation quality" },
+];
 
 // ─── hooks ───────────────────────────────────────────────────────
 function useIsMobile() {
@@ -209,12 +213,106 @@ function DeviceInfo({ d }) {
   return <div style={wrap}>{raw}{suffix}</div>;
 }
 
-// ─── downstream fit section ──────────────────────────────────────
-function DownstreamFitSection({ d, usecase, onUsecaseChange }) {
-  const [tiersOpen, setTiersOpen] = useState(false);
-  const profile = MODALITY_PROFILES[UC_KEY[usecase]] || {};
+// ─── tooltip ─────────────────────────────────────────────────────
+function Tooltip({ text, children }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span style={{ position:"relative", display:"inline-flex" }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      {children}
+      {show && (
+        <div style={{ position:"absolute", bottom:"calc(100% + 8px)", left:"50%", transform:"translateX(-50%)",
+          background:"var(--c-text-1)", color:"#fff", fontSize:11, padding:"6px 10px",
+          borderRadius:6, zIndex:100, lineHeight:1.4, boxShadow:"0 4px 12px rgba(0,0,0,0.15)",
+          pointerEvents:"none", maxWidth:260, whiteSpace:"normal", textAlign:"center" }}>
+          {text}
+        </div>
+      )}
+    </span>
+  );
+}
+
+// ─── radar chart ─────────────────────────────────────────────────
+function RadarChart({ d, size = 200 }) {
+  const pad = 40; // padding for labels
+  const full = size + pad * 2;
+  const cx = full / 2, cy = full / 2, r = size * 0.35;
+  const n = DIMS.length;
+  const angleStep = (2 * Math.PI) / n;
+  const offset = -Math.PI / 2;
+  function point(i, val) {
+    const angle = offset + i * angleStep;
+    return { x: cx + r * val * Math.cos(angle), y: cy + r * val * Math.sin(angle) };
+  }
+  const pts = DIMS.map((dim, i) => {
+    const v = dim.compute(d);
+    return point(i, v != null ? v : 0);
+  });
+  const col = "var(--c-blue)";
+  return (
+    <svg width={full} height={full} viewBox={`0 0 ${full} ${full}`}>
+      {[0.25, 0.5, 0.75, 1.0].map(level => (
+        <polygon key={level}
+          points={DIMS.map((_, i) => { const p = point(i, level); return `${p.x},${p.y}`; }).join(" ")}
+          fill="none" stroke="var(--c-border)" strokeWidth={0.8} opacity={0.6} />
+      ))}
+      {DIMS.map((_, i) => {
+        const p = point(i, 1);
+        return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="var(--c-border)" strokeWidth={0.5} opacity={0.5} />;
+      })}
+      <polygon points={pts.map(p => `${p.x},${p.y}`).join(" ")}
+        fill={col} fillOpacity={0.12} stroke={col} strokeWidth={2} />
+      {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3} fill={col} />)}
+      {DIMS.map((dim, i) => {
+        const angle = offset + i * angleStep;
+        const lx = cx + (r + 28) * Math.cos(angle);
+        const ly = cy + (r + 28) * Math.sin(angle);
+        return (
+          <text key={dim.key} x={lx} y={ly} textAnchor="middle" dominantBaseline="central"
+            style={{ fontSize:10, fill:"var(--c-text-2)", fontFamily:"var(--font)", fontWeight:500 }}>
+            {dim.label}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+// ─── score breakdown bars ────────────────────────────────────────
+function ScoreBreakdown({ d }) {
+  return (
+    <div>
+      {DIMS.map(dim => {
+        const v = dim.compute(d);
+        const pct = v != null ? Math.round(v * 100) : 0;
+        return (
+          <div key={dim.key} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+            <Tooltip text={dim.desc}>
+              <span style={{ width:72, fontSize:10, color:"var(--c-text-3)", fontWeight:500, cursor:"help" }}>
+                {dim.label}
+              </span>
+            </Tooltip>
+            <div style={{ flex:1, height:5, borderRadius:3, background:"var(--c-track)", overflow:"hidden" }}>
+              {v != null && (
+                <div style={{ width:`${pct}%`, height:"100%", borderRadius:3,
+                  background:scoreColor(v), transition:"width 0.4s ease" }} />
+              )}
+            </div>
+            <span style={{ width:22, fontSize:11, fontWeight:600, color:scoreColor(v),
+              fontVariantNumeric:"tabular-nums", textAlign:"right" }}>
+              {fmtPct(v)}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── downstream fit section (3 use cases with hover + modality breakdown) ───
+function DownstreamFitSection({ d }) {
+  const [active, setActive] = useState(null);
   const present = new Set(d.modalities || []);
-  const fitLabel = v => v == null ? "No score" : v >= 0.7 ? "Strong fit" : v >= 0.4 ? "Partial fit" : "Weak fit";
   const TIERS = [
     { key:"critical",  label:"Critical"  },
     { key:"important", label:"Important" },
@@ -222,57 +320,56 @@ function DownstreamFitSection({ d, usecase, onUsecaseChange }) {
   ];
   return (
     <div>
-      <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:10 }}>
+      <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom: active ? 10 : 0 }}>
         {USECASES.map(uc => {
           const v = d[uc.field];
-          const isActive = uc.key === usecase;
+          const isActive = active === uc.key;
           return (
-            <button key={uc.key} onClick={() => onUsecaseChange(uc.key)}
-              title={`${fitLabel(v)} for ${uc.label}`}
-              style={{ fontSize:11, padding:"4px 10px", borderRadius:20, cursor:"pointer",
-                background:scoreBg(v), color:scoreColor(v),
-                border:`2px solid ${isActive ? scoreColor(v) : "transparent"}`,
-                fontWeight:isActive ? 600 : 400, lineHeight:1.4 }}>
-              {UC_SHORT[uc.key]}&thinsp;{fmtPct(v)}
-            </button>
+            <Tooltip key={uc.key} text={uc.desc}>
+              <button onClick={() => setActive(isActive ? null : uc.key)}
+                style={{ fontSize:11, padding:"4px 10px", borderRadius:20, cursor:"pointer",
+                  background: isActive ? scoreBg(v) : "var(--c-track)",
+                  color:scoreColor(v),
+                  border:`2px solid ${isActive ? scoreColor(v) : "transparent"}`,
+                  fontWeight:isActive ? 600 : 400, lineHeight:1.4 }}>
+                {uc.label}&thinsp;{fmtPct(v)}
+              </button>
+            </Tooltip>
           );
         })}
       </div>
-      <button onClick={() => setTiersOpen(o => !o)}
-        style={{ fontSize:11, color:"var(--c-text-3)", background:"none", border:"none",
-          cursor:"pointer", padding:0, display:"inline-flex", alignItems:"center", gap:4,
-          marginBottom: tiersOpen ? 8 : 0 }}>
-        Modality breakdown
-        <span style={{ fontSize:10 }}>{tiersOpen ? "▴" : "▸"}</span>
-      </button>
-      {tiersOpen && (
-        <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
-          {TIERS.map(tier => {
-            const mods = profile[tier.key] || [];
-            if (!mods.length) return null;
-            return (
-              <div key={tier.key} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
-                <span style={{ fontSize:10, color:"var(--c-text-3)", width:56, flexShrink:0, paddingTop:3 }}>
-                  {tier.label}
-                </span>
-                <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
-                  {mods.map(m => {
-                    const has = present.has(m);
-                    return (
-                      <span key={m} style={{ fontSize:10, padding:"2px 7px", borderRadius:4,
-                        background: has ? "var(--c-green-bg)" : "var(--c-red-bg)",
-                        color:      has ? "var(--c-green)"    : "var(--c-red)",
-                        textDecoration: has ? "none" : "line-through" }}>
-                        {m}
-                      </span>
-                    );
-                  })}
+      {active && (() => {
+        const uc = USECASES.find(u => u.key === active);
+        if (!uc) return null;
+        return (
+          <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
+            {TIERS.map(tier => {
+              const mods = uc.profile[tier.key] || [];
+              if (!mods.length) return null;
+              return (
+                <div key={tier.key} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
+                  <span style={{ fontSize:10, color:"var(--c-text-3)", width:56, flexShrink:0, paddingTop:3 }}>
+                    {tier.label}
+                  </span>
+                  <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
+                    {mods.map(m => {
+                      const has = present.has(m);
+                      return (
+                        <span key={m} style={{ fontSize:10, padding:"2px 7px", borderRadius:4,
+                          background: has ? "var(--c-green-bg)" : "var(--c-red-bg)",
+                          color: has ? "var(--c-green)" : "var(--c-red)",
+                          textDecoration: has ? "none" : "line-through" }}>
+                          {m}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        );
+      })()}
     </div>
   );
 }
@@ -406,7 +503,7 @@ function HardwareRow({ label, value }) {
 }
 
 // ─── score card (v4: two-column) ─────────────────────────────────
-function ScoreCard({ d, usecase, onUsecaseChange }) {
+function ScoreCard({ d }) {
   const [open, setOpen] = useState({
     technical:true, reliability:true, access:true,
     scale:true, downstream:true, hardware:false,
@@ -426,7 +523,7 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
 
   return (
     <div style={{ background:"var(--c-surface)", border:"1px solid var(--c-border)",
-      borderRadius:12, maxWidth:800, width:"100%", overflow:"hidden" }}>
+      borderRadius:12, maxWidth:1100, width:"100%", overflow:"hidden" }}>
 
       {/* ── header ─────────────────────────────────────────────── */}
       <div style={{ padding:"20px 22px 6px" }}>
@@ -473,7 +570,7 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
       {/* ── two-column body ─────────────────────────────────────── */}
       <div style={{
         display:"grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 240px",
         padding:"0 22px",
       }}>
 
@@ -514,9 +611,10 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
 
         </div>
 
-        {/* ── RIGHT: Scale · Downstream Fit · Hardware ──────────── */}
+        {/* ── MIDDLE: Scale · Downstream Fit · Hardware ──────────── */}
         <div style={{
           paddingLeft: isMobile ? 0 : 18,
+          paddingRight: isMobile ? 0 : 18,
           borderLeft: isMobile ? "none" : "1px solid var(--c-border)",
         }}>
 
@@ -525,7 +623,7 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
           </Section>
 
           <Section title="Downstream Fit" open={open.downstream} onToggle={() => toggle("downstream")}>
-            <DownstreamFitSection d={d} usecase={usecase} onUsecaseChange={onUsecaseChange} />
+            <DownstreamFitSection d={d} />
           </Section>
 
           <Section title="Hardware & Format" open={open.hardware} onToggle={() => toggle("hardware")}>
@@ -541,6 +639,28 @@ function ScoreCard({ d, usecase, onUsecaseChange }) {
           </Section>
 
         </div>
+
+        {/* ── RIGHT: Radar Chart + Score Breakdown ──────────────── */}
+        <div style={{
+          paddingLeft: isMobile ? 0 : 18,
+          borderLeft: isMobile ? "none" : "1px solid var(--c-border)",
+        }}>
+          {/* radar section */}
+          <div style={{ borderTop:"1px solid var(--c-border)", paddingTop:10 }}>
+            <div style={{ display:"flex", justifyContent:"center" }}>
+              <RadarChart d={d} size={180} />
+            </div>
+          </div>
+          {/* divider */}
+          <div style={{ borderTop:"1px solid var(--c-border)", paddingTop:10, marginTop:4 }}>
+            <div style={{ fontSize:11, fontWeight:600, color:"var(--c-text-1)",
+              letterSpacing:"0.7px", textTransform:"uppercase", marginBottom:10 }}>
+              Score Breakdown
+            </div>
+            <ScoreBreakdown d={d} />
+          </div>
+        </div>
+
       </div>
 
       {/* ── footer ─────────────────────────────────────────────── */}
@@ -673,7 +793,7 @@ function CompareTable({ usecase, sortBy, onSortChange, onRowClick }) {
 // ─── app ──────────────────────────────────────────────────────────
 function App() {
   const [selected, setSelected] = useState(DATA[0]?.name || "");
-  const [usecase,  setUsecase]  = useState("manip");
+  const [usecase,  setUsecase]  = useState("actRecog");
   const [view,     setView]     = useState("card");
   const [sortBy,   setSortBy]   = useState("completeness");
 
@@ -693,7 +813,7 @@ function App() {
   );
 
   return (
-    <div style={{ maxWidth:860, margin:"0 auto", padding:"24px 20px", fontFamily:"var(--font)" }}>
+    <div style={{ maxWidth:1200, margin:"0 auto", padding:"24px 20px", fontFamily:"var(--font)" }}>
 
       {/* page header */}
       <div style={{ marginBottom:22 }}>
@@ -736,7 +856,7 @@ function App() {
 
       {/* views */}
       {view === "card" && d && (
-        <ScoreCard d={d} usecase={usecase} onUsecaseChange={setUsecase} />
+        <ScoreCard d={d} />
       )}
       {view === "compare" && (
         <CompareTable usecase={usecase} sortBy={sortBy}
