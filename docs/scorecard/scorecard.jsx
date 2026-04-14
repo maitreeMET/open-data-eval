@@ -842,12 +842,7 @@ function App() {
             {DATA.map(d => <option key={d.name} value={d.name}>{d.name}</option>)}
           </select>
         )}
-        <select value={usecase} onChange={e => setUsecase(e.target.value)}
-          style={{ fontSize:13, padding:"5px 10px", borderRadius:6,
-            border:"1px solid var(--c-border)", background:"var(--c-surface)",
-            color:"var(--c-text-1)" }}>
-          {USECASES.map(u => <option key={u.key} value={u.key}>{u.label}</option>)}
-        </select>
+
         <div style={{ marginLeft:"auto", display:"flex", gap:4 }}>
           <TabBtn id="card"    label="Card"    />
           <TabBtn id="compare" label="Compare" />
