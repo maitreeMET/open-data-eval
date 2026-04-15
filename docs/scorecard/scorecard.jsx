@@ -617,6 +617,302 @@ function CompareTable({ usecase, sortBy, onSortChange, onRowClick }) {
   );
 }
 
+// ─── compare: 3 use-case constants ───────────────────────────────
+const COMPARE_USECASES = [
+  { key: "actRecog", label: "Action Recognition", field: "actRecog",
+    desc: "Temporal activity understanding — classifying and localizing actions in egocentric video",
+    profile: { critical:["RGB video"], important:["Audio","Narrations/captions","Optical flow"], bonus:["Eye gaze","Hand pose annotations","IMU"] } },
+  { key: "handObj", label: "Hand-Object Interaction", field: "handPose",
+    desc: "Hand pose, grasping, and manipulation analysis from first-person view",
+    profile: { critical:["RGB video","Hand pose annotations"], important:["Depth (RGB-D)","Depth (stereo)"], bonus:["Tactile","IMU","Force/torque"] } },
+  { key: "nav", label: "Navigation", field: "nav",
+    desc: "Navigation, 3D reconstruction, SLAM, and scene-level reasoning",
+    profile: { critical:["RGB video","IMU"], important:["Depth (RGB-D)","SLAM/odometry","3D point clouds"], bonus:["LiDAR","Depth (stereo)","Eye gaze"] } },
+];
+
+// ─── compare: tooltip ────────────────────────────────────────────
+function CmpTooltip({ text, children }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span style={{ position:"relative", display:"inline-flex" }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      {children}
+      {show && (
+        <div style={{ position:"absolute", bottom:"calc(100% + 8px)", left:"50%", transform:"translateX(-50%)",
+          background:"var(--c-text-1)", color:"#fff", fontSize:11, padding:"6px 10px",
+          borderRadius:6, zIndex:100, lineHeight:1.4, boxShadow:"0 4px 12px rgba(0,0,0,0.15)",
+          pointerEvents:"none", maxWidth:260, whiteSpace:"normal", textAlign:"center" }}>
+          {text}
+        </div>
+      )}
+    </span>
+  );
+}
+
+// ─── compare: downstream fit (3 use cases) ───────────────────────
+function CmpDownstreamFit({ d }) {
+  const [active, setActive] = useState(null);
+  const present = new Set(d.modalities || []);
+  const TIERS = [{ key:"critical", label:"Critical" }, { key:"important", label:"Important" }, { key:"bonus", label:"Bonus" }];
+  return (
+    <div>
+      <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom: active ? 10 : 0 }}>
+        {COMPARE_USECASES.map(uc => {
+          const v = d[uc.field];
+          const isActive = active === uc.key;
+          return (
+            <CmpTooltip key={uc.key} text={uc.desc}>
+              <button onClick={() => setActive(isActive ? null : uc.key)}
+                style={{ fontSize:11, padding:"4px 10px", borderRadius:20, cursor:"pointer",
+                  background: isActive ? scoreBg(v) : "var(--c-track)", color:scoreColor(v),
+                  border:`2px solid ${isActive ? scoreColor(v) : "transparent"}`,
+                  fontWeight:isActive ? 600 : 400, lineHeight:1.4 }}>
+                {uc.label}&thinsp;{fmtPct(v)}
+              </button>
+            </CmpTooltip>
+          );
+        })}
+      </div>
+      {active && (() => {
+        const uc = COMPARE_USECASES.find(u => u.key === active);
+        if (!uc) return null;
+        return (
+          <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
+            {TIERS.map(tier => {
+              const mods = uc.profile[tier.key] || [];
+              if (!mods.length) return null;
+              return (
+                <div key={tier.key} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
+                  <span style={{ fontSize:10, color:"var(--c-text-3)", width:56, flexShrink:0, paddingTop:3 }}>{tier.label}</span>
+                  <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
+                    {mods.map(m => {
+                      const has = present.has(m);
+                      return (
+                        <span key={m} style={{ fontSize:10, padding:"2px 7px", borderRadius:4,
+                          background: has ? "var(--c-green-bg)" : "var(--c-red-bg)",
+                          color: has ? "var(--c-green)" : "var(--c-red)",
+                          textDecoration: has ? "none" : "line-through" }}>{m}</span>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+// ─── compare: fact sheet helpers ─────────────────────────────────
+function FH({ title }) {
+  return <div style={{ fontSize:10, fontWeight:700, color:"var(--c-text-2)", textTransform:"uppercase",
+    letterSpacing:0.8, padding:"10px 0 5px", borderBottom:"1px solid var(--c-border)" }}>{title}</div>;
+}
+function FNum({ label, vA, vB }) {
+  const nA = vA != null ? Number(vA) : null, nB = vB != null ? Number(vB) : null;
+  const win = nA != null && nB != null ? (nA > nB ? "A" : nB > nA ? "B" : null) : null;
+  const ratio = nA && nB && Math.min(nA, nB) > 0 ? (Math.max(nA, nB) / Math.min(nA, nB)).toFixed(1) + "x" : "";
+  const maxV = Math.max(nA || 0, nB || 0);
+  const pA = maxV > 0 && nA ? (nA / maxV) * 100 : 0;
+  const pB = maxV > 0 && nB ? (nB / maxV) * 100 : 0;
+  return (
+    <div style={{ display:"flex", alignItems:"center", padding:"5px 0", borderBottom:"1px solid var(--c-track)" }}>
+      <span style={{ width:80, fontSize:10, color:"var(--c-text-3)", fontWeight:500, flexShrink:0 }}>{label}</span>
+      <span style={{ width:52, fontSize:11, fontWeight: win === "A" ? 700 : 400, textAlign:"right",
+        color: win === "A" ? "var(--c-blue)" : "var(--c-text-2)", fontVariantNumeric:"tabular-nums", flexShrink:0 }}>
+        {nA != null ? nA.toLocaleString() : "—"}</span>
+      <div style={{ flex:1, display:"flex", gap:1, margin:"0 6px" }}>
+        <div style={{ flex:1, height:4, borderRadius:2, background:"var(--c-track)", overflow:"hidden", direction:"rtl" }}>
+          <div style={{ width:`${pA}%`, height:"100%", borderRadius:2, background:"var(--c-blue)" }} />
+        </div>
+        <div style={{ flex:1, height:4, borderRadius:2, background:"var(--c-track)", overflow:"hidden" }}>
+          <div style={{ width:`${pB}%`, height:"100%", borderRadius:2, background:"var(--c-amber)" }} />
+        </div>
+      </div>
+      <span style={{ width:52, fontSize:11, fontWeight: win === "B" ? 700 : 400,
+        color: win === "B" ? "var(--c-amber)" : "var(--c-text-2)", fontVariantNumeric:"tabular-nums", flexShrink:0 }}>
+        {nB != null ? nB.toLocaleString() : "—"}</span>
+      <span style={{ width:32, fontSize:9, color:"var(--c-text-3)", textAlign:"right", flexShrink:0 }}>{ratio}</span>
+    </div>
+  );
+}
+function FTxt({ label, vA, vB }) {
+  return (
+    <div style={{ display:"flex", alignItems:"center", padding:"5px 0", borderBottom:"1px solid var(--c-track)" }}>
+      <span style={{ width:80, fontSize:10, color:"var(--c-text-3)", fontWeight:500, flexShrink:0 }}>{label}</span>
+      <div style={{ flex:1, textAlign:"right", paddingRight:8 }}>
+        <span style={{ fontSize:11, color: vA ? "var(--c-text-1)" : "var(--c-text-3)",
+          fontStyle: vA ? "normal" : "italic" }}>{vA || "—"}</span>
+      </div>
+      <div style={{ width:1, height:16, background:"var(--c-border)", flexShrink:0 }} />
+      <div style={{ flex:1, paddingLeft:8 }}>
+        <span style={{ fontSize:11, color: vB ? "var(--c-text-1)" : "var(--c-text-3)",
+          fontStyle: vB ? "normal" : "italic" }}>{vB || "—"}</span>
+      </div>
+      <span style={{ width:32, flexShrink:0 }}></span>
+    </div>
+  );
+}
+function FChk({ label, vA, vB }) {
+  const ic = v => v === true ? "✓" : v === false ? "✗" : "?";
+  const cl = v => v === true ? "var(--c-green)" : v === false ? "var(--c-null)" : "var(--c-text-3)";
+  return (
+    <div style={{ display:"flex", alignItems:"center", padding:"4px 0", borderBottom:"1px solid var(--c-track)" }}>
+      <span style={{ width:80, fontSize:10, color:"var(--c-text-3)", fontWeight:500, flexShrink:0 }}>{label}</span>
+      <div style={{ flex:1, textAlign:"right", paddingRight:8 }}>
+        <span style={{ fontSize:12, fontWeight:600, color:cl(vA) }}>{ic(vA)}</span>
+      </div>
+      <div style={{ width:1, height:16, background:"var(--c-border)", flexShrink:0 }} />
+      <div style={{ flex:1, paddingLeft:8 }}>
+        <span style={{ fontSize:12, fontWeight:600, color:cl(vB) }}>{ic(vB)}</span>
+      </div>
+      <span style={{ width:32, flexShrink:0 }}></span>
+    </div>
+  );
+}
+
+// ─── compare view ────────────────────────────────────────────────
+function CompareSideBySide() {
+  const [aIdx, setAIdx] = useState(0);
+  const [bIdx, setBIdx] = useState(Math.min(1, DATA.length - 1));
+  const A = DATA[aIdx], B = DATA[bIdx];
+
+  const sel = { fontSize:13, padding:"5px 10px", borderRadius:6,
+    border:"1px solid var(--c-border)", background:"var(--c-surface)",
+    color:"var(--c-text-1)", width:"100%" };
+  const shortA = A.resW && A.resH ? Math.min(A.resW, A.resH) : null;
+  const shortB = B.resW && B.resH ? Math.min(B.resW, B.resH) : null;
+  const dlL = d => d.dl == null ? null : d.dl >= 0.8 ? (d.dlFramework && d.dlFramework !== "unspecified" ? d.dlFramework : "Yes") : d.dl >= 0.5 ? "Community" : "No";
+
+  return (
+    <div>
+      <div style={{ display:"flex", gap:12, marginBottom:18, flexWrap:"wrap", alignItems:"flex-end" }}>
+        <div style={{ flex:1, minWidth:160 }}>
+          <label style={{ fontSize:10, fontWeight:700, color:"var(--c-text-3)", textTransform:"uppercase",
+            letterSpacing:0.8, display:"block", marginBottom:5 }}>Dataset A</label>
+          <select value={aIdx} onChange={e => setAIdx(+e.target.value)} style={sel}>
+            {DATA.map((d, i) => <option key={i} value={i}>{d.name}</option>)}
+          </select>
+        </div>
+        <div style={{ fontSize:14, fontWeight:700, color:"var(--c-text-3)", paddingBottom:6 }}>vs</div>
+        <div style={{ flex:1, minWidth:160 }}>
+          <label style={{ fontSize:10, fontWeight:700, color:"var(--c-text-3)", textTransform:"uppercase",
+            letterSpacing:0.8, display:"block", marginBottom:5 }}>Dataset B</label>
+          <select value={bIdx} onChange={e => setBIdx(+e.target.value)} style={sel}>
+            {DATA.map((d, i) => <option key={i} value={i}>{d.name}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div style={{ background:"var(--c-surface)", border:"1px solid var(--c-border)",
+        borderRadius:12, overflow:"hidden" }}>
+        <div style={{ padding:"16px 22px" }}>
+          <div style={{ display:"flex", alignItems:"center", marginBottom:2 }}>
+            <span style={{ width:80, flexShrink:0 }}></span>
+            <div style={{ flex:1, textAlign:"right", paddingRight:8 }}>
+              <span style={{ fontSize:12, fontWeight:700, color:"var(--c-blue)" }}>{A.name}</span>
+            </div>
+            <div style={{ width:1, height:16, background:"var(--c-border)", flexShrink:0 }} />
+            <div style={{ flex:1, paddingLeft:8 }}>
+              <span style={{ fontSize:12, fontWeight:700, color:"var(--c-amber)" }}>{B.name}</span>
+            </div>
+            <span style={{ width:32, flexShrink:0 }}></span>
+          </div>
+
+          <FH title="Scale" />
+          <FNum label="Hours" vA={A.hrs} vB={B.hrs} />
+          <FNum label="Environments" vA={A.envDivCount} vB={B.envDivCount} />
+          <FNum label="Participants" vA={A.demoParts} vB={B.demoParts} />
+          <FNum label="Countries" vA={A.demoGeo} vB={B.demoGeo} />
+          <FNum label="Citations" vA={A.citations} vB={B.citations} />
+
+          <FH title="Technical" />
+          <FTxt label="Frame rate" vA={A.fpsRaw != null ? A.fpsRaw + " fps" : null} vB={B.fpsRaw != null ? B.fpsRaw + " fps" : null} />
+          <FTxt label="Resolution" vA={shortA ? shortA + "p" : null} vB={shortB ? shortB + "p" : null} />
+          <FChk label="Intrinsics" vA={A.calIntrinsics} vB={B.calIntrinsics} />
+          <FChk label="Distortion" vA={A.calDistortion} vB={B.calDistortion} />
+          <FChk label="Extrinsics" vA={A.calExtrinsics} vB={B.calExtrinsics} />
+          <FChk label="Validated" vA={A.calValidated} vB={B.calValidated} />
+
+          <FH title="Annotations" />
+          <FNum label="Coverage %" vA={A.annCov != null ? Math.round(A.annCov * 100) : null} vB={B.annCov != null ? Math.round(B.annCov * 100) : null} />
+          <FNum label="Modalities" vA={A.modCount} vB={B.modCount} />
+          {(() => {
+            const modsA = A.modalities || [], modsB = B.modalities || [];
+            const setB = new Set(modsB), setA = new Set(modsA);
+            const onlyA = modsA.filter(m => !setB.has(m));
+            const both = modsA.filter(m => setB.has(m));
+            const onlyB = modsB.filter(m => !setA.has(m));
+            return (
+              <div style={{ padding:"8px 0 6px", borderBottom:"1px solid var(--c-track)" }}>
+                <div style={{ display:"flex", gap:16, marginLeft:80 }}>
+                  <div style={{ flex:1, textAlign:"right" }}>
+                    {onlyA.length > 0 ? (
+                      <div style={{ display:"flex", gap:3, flexWrap:"wrap", justifyContent:"flex-end" }}>
+                        {onlyA.map(m => <span key={m} style={{ fontSize:9, padding:"1px 5px", borderRadius:3,
+                          background:"rgba(37,99,235,0.08)", color:"var(--c-blue)", fontWeight:500 }}>{m}</span>)}
+                      </div>
+                    ) : <span style={{ fontSize:9, color:"var(--c-text-3)", fontStyle:"italic" }}>none unique</span>}
+                    <div style={{ fontSize:8, color:"var(--c-blue)", marginTop:3, fontWeight:600 }}>{A.name} only</div>
+                  </div>
+                  <div style={{ flex:1, textAlign:"center" }}>
+                    {both.length > 0 ? (
+                      <div style={{ display:"flex", gap:3, flexWrap:"wrap", justifyContent:"center" }}>
+                        {both.map(m => <span key={m} style={{ fontSize:9, padding:"1px 5px", borderRadius:3,
+                          background:"var(--c-green-bg)", color:"var(--c-green)", fontWeight:500 }}>{m}</span>)}
+                      </div>
+                    ) : <span style={{ fontSize:9, color:"var(--c-text-3)", fontStyle:"italic" }}>none shared</span>}
+                    <div style={{ fontSize:8, color:"var(--c-green)", marginTop:3, fontWeight:600 }}>both</div>
+                  </div>
+                  <div style={{ flex:1 }}>
+                    {onlyB.length > 0 ? (
+                      <div style={{ display:"flex", gap:3, flexWrap:"wrap" }}>
+                        {onlyB.map(m => <span key={m} style={{ fontSize:9, padding:"1px 5px", borderRadius:3,
+                          background:"rgba(217,119,6,0.08)", color:"var(--c-amber)", fontWeight:500 }}>{m}</span>)}
+                      </div>
+                    ) : <span style={{ fontSize:9, color:"var(--c-text-3)", fontStyle:"italic" }}>none unique</span>}
+                    <div style={{ fontSize:8, color:"var(--c-amber)", marginTop:3, fontWeight:600 }}>{B.name} only</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          <FH title="Access" />
+          <FTxt label="License" vA={A.licType} vB={B.licType} />
+          <FTxt label="Access level" vA={A.accLevel} vB={B.accLevel} />
+          <FTxt label="URL status" vA={A.accUrlStatus} vB={B.accUrlStatus} />
+          <FTxt label="Dataloader" vA={dlL(A)} vB={dlL(B)} />
+          <FTxt label="Docs" vA={A.docRating != null ? A.docRating + "/3" : null} vB={B.docRating != null ? B.docRating + "/3" : null} />
+
+          <FH title="Hardware" />
+          <FTxt label="Device" vA={A.captureDevice} vB={B.captureDevice} />
+          <FTxt label="Video fmt" vA={A.videoFormat} vB={B.videoFormat} />
+          <FTxt label="Annot. fmt" vA={A.annotFormat} vB={B.annotFormat} />
+        </div>
+
+        <div style={{ padding:"14px 22px", borderTop:"1px solid var(--c-border)" }}>
+          <div style={{ fontSize:10, fontWeight:700, color:"var(--c-text-2)", textTransform:"uppercase",
+            letterSpacing:0.8, marginBottom:12 }}>Downstream Fit</div>
+          <div style={{ display:"flex", gap:20 }}>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:"var(--c-blue)", marginBottom:6 }}>{A.name}</div>
+              <CmpDownstreamFit d={A} />
+            </div>
+            <div style={{ width:1, background:"var(--c-border)", flexShrink:0 }} />
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:"var(--c-amber)", marginBottom:6 }}>{B.name}</div>
+              <CmpDownstreamFit d={B} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── app ──────────────────────────────────────────────────────────
 function App() {
   const [selected, setSelected] = useState(DATA[0]?.name || "");
@@ -640,7 +936,7 @@ function App() {
   );
 
   return (
-    <div style={{ maxWidth:860, margin:"0 auto", padding:"24px 20px", fontFamily:"var(--font)" }}>
+    <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 20px", fontFamily:"var(--font)" }}>
 
       {/* page header */}
       <div style={{ marginBottom:22 }}>
@@ -676,8 +972,9 @@ function App() {
           {USECASES.map(u => <option key={u.key} value={u.key}>{u.label}</option>)}
         </select>
         <div style={{ marginLeft:"auto", display:"flex", gap:4 }}>
-          <TabBtn id="card"    label="Card"    />
-          <TabBtn id="compare" label="Compare" />
+          <TabBtn id="card"     label="Card"     />
+          <TabBtn id="datasets" label="Datasets" />
+          <TabBtn id="compare"  label="Compare"  />
         </div>
       </div>
 
@@ -685,9 +982,12 @@ function App() {
       {view === "card" && d && (
         <ScoreCard d={d} usecase={usecase} onUsecaseChange={setUsecase} />
       )}
-      {view === "compare" && (
+      {view === "datasets" && (
         <CompareTable usecase={usecase} sortBy={sortBy}
           onSortChange={setSortBy} onRowClick={handleRowClick} />
+      )}
+      {view === "compare" && (
+        <CompareSideBySide />
       )}
 
       {/* page footer */}
