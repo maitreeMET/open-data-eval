@@ -1,0 +1,241 @@
+{
+  "eval_type": "file",
+  "dataset_path": "/Users/varun/Downloads/EK55-sample/EPIC-KITCHENS",
+  "evaluated_at": "2026-04-17T21:41:07.649619+00:00",
+  "summary": {
+    "total_files": 10,
+    "files_probed": 10,
+    "files_with_errors": 0,
+    "total_duration_sec": 358.441,
+    "total_hours": 0.09957,
+    "total_frames": 21485,
+    "total_size_mb": 1395.163,
+    "resolutions": {
+      "1920x1080": 9
+    },
+    "codecs": {
+      "h264": 9
+    },
+    "clips_with_audio": 9,
+    "clips_without_audio": 0
+  },
+  "distributions": {
+    "fps": {
+      "n": 9,
+      "mean": 59.9401,
+      "min": 59.9401,
+      "max": 59.9401,
+      "std": 0.0,
+      "p5": 59.9401,
+      "p95": 59.9401
+    },
+    "duration_sec": {
+      "n": 9,
+      "mean": 39.8268,
+      "min": 10.4771,
+      "max": 66.9669,
+      "std": 19.999,
+      "p5": 10.4771,
+      "p95": 55.9726
+    },
+    "bitrate_kbps": {
+      "n": 9,
+      "mean": 30025.5556,
+      "min": 29972,
+      "max": 30207,
+      "std": 72.3034,
+      "p5": 29972,
+      "p95": 30051
+    },
+    "nb_frames": {
+      "n": 9,
+      "mean": 2387.2222,
+      "min": 628,
+      "max": 4014,
+      "std": 1198.744,
+      "p5": 628,
+      "p95": 3355
+    },
+    "file_size_mb": {
+      "n": 10,
+      "mean": 139.5163,
+      "min": 37.717,
+      "max": 240.784,
+      "std": 68.8279,
+      "p5": 37.717,
+      "p95": 201.261
+    }
+  },
+  "annotation_coverage": null,
+  "discrepancies": null,
+  "errors": null,
+  "per_file": {
+    "P02_02": {
+      "file": "P02_02.MP4",
+      "size_mb": 104.734,
+      "video": null
+    },
+    "P02_05": {
+      "file": "P02_05.MP4",
+      "size_mb": 66.882,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 18.551867,
+        "nb_frames": 1112,
+        "bitrate_kbps": 30051,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_08": {
+      "file": "P02_08.MP4",
+      "size_mb": 240.784,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 66.9669,
+        "nb_frames": 4014,
+        "bitrate_kbps": 29972,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_10": {
+      "file": "P02_10.MP4",
+      "size_mb": 175.413,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 48.7487,
+        "nb_frames": 2922,
+        "bitrate_kbps": 29994,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_11": {
+      "file": "P02_11.MP4",
+      "size_mb": 194.606,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 54.087367,
+        "nb_frames": 3242,
+        "bitrate_kbps": 29991,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P03_08": {
+      "file": "P03_08.MP4",
+      "size_mb": 106.631,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 29.4294,
+        "nb_frames": 1764,
+        "bitrate_kbps": 30207,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P03_11": {
+      "file": "P03_11.MP4",
+      "size_mb": 189.441,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 52.635917,
+        "nb_frames": 3155,
+        "bitrate_kbps": 30004,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P03_12": {
+      "file": "P03_12.MP4",
+      "size_mb": 77.694,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 21.57155,
+        "nb_frames": 1293,
+        "bitrate_kbps": 30026,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P03_13": {
+      "file": "P03_13.MP4",
+      "size_mb": 201.261,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 55.972583,
+        "nb_frames": 3355,
+        "bitrate_kbps": 29976,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P03_15": {
+      "file": "P03_15.MP4",
+      "size_mb": 37.717,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": 59.9401,
+        "duration_sec": 10.477133,
+        "nb_frames": 628,
+        "bitrate_kbps": 30009,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    }
+  }
+}

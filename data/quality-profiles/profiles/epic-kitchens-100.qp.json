@@ -12,7 +12,7 @@
   "qp:qualityProfile": {
     "qp:schemaVersion": "1.0",
     "qp:evalLevel": "metadata",
-    "qp:evaluatedAt": "2026-04-17T13:46:49Z",
+    "qp:evaluatedAt": "2026-04-17T21:41:11Z",
     "qp:evaluatedBy": "open-data-eval",
     "scores": {
       "fps": {
@@ -371,6 +371,84 @@
           "Und-ML"
         ]
       }
+    },
+    "file_eval": {
+      "eval_type": "file",
+      "evaluated_at": "2026-04-17T21:41:03.093351+00:00",
+      "dataset_path": "/Users/varun/Downloads/EK100-sample/EPIC-KITCHENS",
+      "summary": {
+        "total_files": 10,
+        "total_duration_sec": 354.7,
+        "total_hours": 0.09853,
+        "total_frames": 17735,
+        "total_size_mb": 1418.706,
+        "resolutions": {
+          "1920x1080": 7
+        },
+        "codecs": {
+          "hevc": 7
+        },
+        "clips_with_audio": 7,
+        "clips_without_audio": 0
+      },
+      "distributions": {
+        "fps": {
+          "n": 7,
+          "mean": 50.0,
+          "min": 50.0,
+          "max": 50.0,
+          "std": 0.0,
+          "p5": 50.0,
+          "p95": 50.0
+        },
+        "duration_sec": {
+          "n": 7,
+          "mean": 50.6714,
+          "min": 26.34,
+          "max": 80.44,
+          "std": 21.4885,
+          "p5": 26.34,
+          "p95": 68.38
+        },
+        "bitrate_kbps": {
+          "n": 7,
+          "mean": 23989,
+          "min": 23936,
+          "max": 24021,
+          "std": 32.6088,
+          "p5": 23936,
+          "p95": 24020
+        },
+        "nb_frames": {
+          "n": 7,
+          "mean": 2533.5714,
+          "min": 1317,
+          "max": 4022,
+          "std": 1074.4235,
+          "p5": 1317,
+          "p95": 3419
+        },
+        "file_size_mb": {
+          "n": 10,
+          "mean": 141.8706,
+          "min": 76.065,
+          "max": 232.454,
+          "std": 51.3948,
+          "p5": 76.065,
+          "p95": 197.719
+        }
+      },
+      "annotation_coverage": null,
+      "discrepancies": [
+        {
+          "source": "qp_vs_actual",
+          "field": "fps",
+          "claimed": 60.0,
+          "actual": 50.0,
+          "delta": -10.0,
+          "severity": "medium"
+        }
+      ]
     }
   }
 }

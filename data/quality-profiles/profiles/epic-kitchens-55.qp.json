@@ -12,7 +12,7 @@
   "qp:qualityProfile": {
     "qp:schemaVersion": "1.0",
     "qp:evalLevel": "metadata",
-    "qp:evaluatedAt": "2026-04-17T13:46:49Z",
+    "qp:evaluatedAt": "2026-04-17T21:41:11Z",
     "qp:evaluatedBy": "open-data-eval",
     "scores": {
       "fps": {
@@ -369,6 +369,75 @@
           "Und-ML"
         ]
       }
+    },
+    "file_eval": {
+      "eval_type": "file",
+      "evaluated_at": "2026-04-17T21:41:07.649619+00:00",
+      "dataset_path": "/Users/varun/Downloads/EK55-sample/EPIC-KITCHENS",
+      "summary": {
+        "total_files": 10,
+        "total_duration_sec": 358.441,
+        "total_hours": 0.09957,
+        "total_frames": 21485,
+        "total_size_mb": 1395.163,
+        "resolutions": {
+          "1920x1080": 9
+        },
+        "codecs": {
+          "h264": 9
+        },
+        "clips_with_audio": 9,
+        "clips_without_audio": 0
+      },
+      "distributions": {
+        "fps": {
+          "n": 9,
+          "mean": 59.9401,
+          "min": 59.9401,
+          "max": 59.9401,
+          "std": 0.0,
+          "p5": 59.9401,
+          "p95": 59.9401
+        },
+        "duration_sec": {
+          "n": 9,
+          "mean": 39.8268,
+          "min": 10.4771,
+          "max": 66.9669,
+          "std": 19.999,
+          "p5": 10.4771,
+          "p95": 55.9726
+        },
+        "bitrate_kbps": {
+          "n": 9,
+          "mean": 30025.5556,
+          "min": 29972,
+          "max": 30207,
+          "std": 72.3034,
+          "p5": 29972,
+          "p95": 30051
+        },
+        "nb_frames": {
+          "n": 9,
+          "mean": 2387.2222,
+          "min": 628,
+          "max": 4014,
+          "std": 1198.744,
+          "p5": 628,
+          "p95": 3355
+        },
+        "file_size_mb": {
+          "n": 10,
+          "mean": 139.5163,
+          "min": 37.717,
+          "max": 240.784,
+          "std": 68.8279,
+          "p5": 37.717,
+          "p95": 201.261
+        }
+      },
+      "annotation_coverage": null,
+      "discrepancies": null
     }
   }
 }

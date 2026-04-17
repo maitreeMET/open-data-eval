@@ -1,0 +1,215 @@
+{
+  "eval_type": "file",
+  "dataset_path": "/Users/varun/Downloads/EK100-sample/EPIC-KITCHENS",
+  "evaluated_at": "2026-04-17T21:41:03.093351+00:00",
+  "summary": {
+    "total_files": 10,
+    "files_probed": 10,
+    "files_with_errors": 0,
+    "total_duration_sec": 354.7,
+    "total_hours": 0.09853,
+    "total_frames": 17735,
+    "total_size_mb": 1418.706,
+    "resolutions": {
+      "1920x1080": 7
+    },
+    "codecs": {
+      "hevc": 7
+    },
+    "clips_with_audio": 7,
+    "clips_without_audio": 0
+  },
+  "distributions": {
+    "fps": {
+      "n": 7,
+      "mean": 50.0,
+      "min": 50.0,
+      "max": 50.0,
+      "std": 0.0,
+      "p5": 50.0,
+      "p95": 50.0
+    },
+    "duration_sec": {
+      "n": 7,
+      "mean": 50.6714,
+      "min": 26.34,
+      "max": 80.44,
+      "std": 21.4885,
+      "p5": 26.34,
+      "p95": 68.38
+    },
+    "bitrate_kbps": {
+      "n": 7,
+      "mean": 23989,
+      "min": 23936,
+      "max": 24021,
+      "std": 32.6088,
+      "p5": 23936,
+      "p95": 24020
+    },
+    "nb_frames": {
+      "n": 7,
+      "mean": 2533.5714,
+      "min": 1317,
+      "max": 4022,
+      "std": 1074.4235,
+      "p5": 1317,
+      "p95": 3419
+    },
+    "file_size_mb": {
+      "n": 10,
+      "mean": 141.8706,
+      "min": 76.065,
+      "max": 232.454,
+      "std": 51.3948,
+      "p5": 76.065,
+      "p95": 197.719
+    }
+  },
+  "annotation_coverage": null,
+  "discrepancies": null,
+  "errors": null,
+  "per_file": {
+    "P01_107": {
+      "file": "P01_107.MP4",
+      "size_mb": 138.875,
+      "video": null
+    },
+    "P02_106": {
+      "file": "P02_106.MP4",
+      "size_mb": 185.833,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 64.34,
+        "nb_frames": 3217,
+        "bitrate_kbps": 23995,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_111": {
+      "file": "P02_111.MP4",
+      "size_mb": 152.026,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 52.58,
+        "nb_frames": 2629,
+        "bitrate_kbps": 24020,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_114": {
+      "file": "P02_114.MP4",
+      "size_mb": 102.939,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 35.7,
+        "nb_frames": 1785,
+        "bitrate_kbps": 23954,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_115": {
+      "file": "P02_115.MP4",
+      "size_mb": 130.406,
+      "video": null
+    },
+    "P02_116": {
+      "file": "P02_116.MP4",
+      "size_mb": 197.719,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 68.38,
+        "nb_frames": 3419,
+        "bitrate_kbps": 24021,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_119": {
+      "file": "P02_119.MP4",
+      "size_mb": 124.828,
+      "video": null
+    },
+    "P02_127": {
+      "file": "P02_127.MP4",
+      "size_mb": 76.065,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 26.34,
+        "nb_frames": 1317,
+        "bitrate_kbps": 23990,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_133": {
+      "file": "P02_133.MP4",
+      "size_mb": 232.454,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 80.44,
+        "nb_frames": 4022,
+        "bitrate_kbps": 24007,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    },
+    "P02_134": {
+      "file": "P02_134.MP4",
+      "size_mb": 77.561,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1080,
+        "fps": 50.0,
+        "duration_sec": 26.92,
+        "nb_frames": 1346,
+        "bitrate_kbps": 23936,
+        "pix_fmt": "yuvj420p",
+        "has_audio": true,
+        "audio_codecs": [
+          "aac"
+        ]
+      }
+    }
+  }
+}

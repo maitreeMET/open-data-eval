@@ -338,13 +338,13 @@ def run_file_eval(dataset_dir: Path, output_path: Path | None = None) -> dict:
     # ── Find video files ──────────────────────────────────────────────────────
     clips_dir = dataset_dir / "clips"
     if clips_dir.exists():
-        exts = ("*.mp4", "*.mov", "*.avi", "*.mkv", "*.webm")
+        exts = ("*.mp4", "*.MP4", "*.mov", "*.MOV", "*.avi", "*.AVI", "*.mkv", "*.MKV", "*.webm")
         video_files = sorted(
             p for ext in exts for p in clips_dir.glob(ext)
         )
     else:
         video_files = sorted(
-            p for ext in ("*.mp4", "*.mov", "*.avi", "*.mkv")
+            p for ext in ("*.mp4", "*.MP4", "*.mov", "*.MOV", "*.avi", "*.AVI", "*.mkv", "*.MKV")
             for p in dataset_dir.rglob(ext)
             if ".git" not in p.parts
         )
@@ -472,6 +472,47 @@ def run_file_eval(dataset_dir: Path, output_path: Path | None = None) -> dict:
     return report
 
 
+def _compare_vs_qp(report: dict, qp: dict) -> list[dict]:
+    """Compare file_eval results against QP claims; return discrepancy list."""
+    profile = qp.get("qp:qualityProfile", qp)
+    scores  = profile.get("scores", {})
+    dist    = report.get("distributions", {})
+    issues  = []
+
+    # FPS: compare QP claimed raw_value vs measured mean fps
+    qp_fps = (scores.get("fps") or {}).get("raw_value")
+    actual_fps = (dist.get("fps") or {}).get("mean")
+    if qp_fps is not None and actual_fps is not None:
+        if abs(actual_fps - qp_fps) > 1.0:
+            issues.append({
+                "source":   "qp_vs_actual",
+                "field":    "fps",
+                "claimed":  qp_fps,
+                "actual":   round(actual_fps, 4),
+                "delta":    round(actual_fps - qp_fps, 4),
+                "severity": "medium" if abs(actual_fps - qp_fps) < 15 else "high",
+            })
+
+    # Resolution: compare QP claimed width×height vs most common resolution in sample
+    res_score = scores.get("resolution") or {}
+    qp_w, qp_h = res_score.get("width"), res_score.get("height")
+    resolutions = report.get("summary", {}).get("resolutions", {})
+    if qp_w and qp_h and resolutions:
+        qp_res_str = f"{qp_w}x{qp_h}"
+        # Most common resolution in sample
+        dominant_res = max(resolutions, key=resolutions.__getitem__)
+        if dominant_res != qp_res_str:
+            issues.append({
+                "source":   "qp_vs_actual",
+                "field":    "resolution",
+                "claimed":  qp_res_str,
+                "actual":   dominant_res,
+                "severity": "medium",
+            })
+
+    return issues
+
+
 def append_file_eval_to_qp(report: dict, qp_path: Path) -> None:
     """Append the file_eval summary to an existing QP JSON file."""
     qp_path = Path(qp_path)
@@ -479,6 +520,12 @@ def append_file_eval_to_qp(report: dict, qp_path: Path) -> None:
         qp = json.load(f)
 
     s = report["summary"]
+
+    # Merge per-file discrepancies with QP-level comparison
+    existing_discs = report.get("discrepancies") or []
+    qp_discs = _compare_vs_qp(report, qp)
+    all_discs = existing_discs + qp_discs
+
     fe = {
         "eval_type":       "file",
         "evaluated_at":    report["evaluated_at"],
@@ -498,8 +545,13 @@ def append_file_eval_to_qp(report: dict, qp_path: Path) -> None:
             k: v for k, v in report["distributions"].items() if v is not None
         },
         "annotation_coverage": report.get("annotation_coverage"),
-        "discrepancies": report.get("discrepancies"),
+        "discrepancies": all_discs or None,
     }
+
+    if qp_discs:
+        print(f"\n⚠  {len(qp_discs)} QP-vs-actual discrepancy(ies):")
+        for d in qp_discs:
+            print(f"   {d['field']}: claimed={d.get('claimed')!r}  actual={d.get('actual')!r}")
 
     qp_profile = qp.get("qp:qualityProfile", qp)
     qp_profile["file_eval"] = fe
