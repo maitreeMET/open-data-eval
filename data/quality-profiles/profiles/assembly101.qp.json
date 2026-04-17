@@ -6,8 +6,8 @@
     "iso": "http://opendataeval.org/iso5259/"
   },
   "@type": "cr:Dataset",
-  "name": "EgoLife",
-  "url": "https://egolife-ai.github.io/blog/",
+  "name": "Assembly101",
+  "url": "https://assembly-101.github.io/",
   "dct:conformsTo": "http://opendataeval.org/qp/1.0",
   "qp:qualityProfile": {
     "qp:schemaVersion": "1.0",
@@ -19,29 +19,26 @@
         "score": 1.0,
         "raw_value": 30.0,
         "method": "piecewise_continuous",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Acc-ML"
       },
       "resolution": {
-        "score": 1.0,
-        "width": 1408,
-        "height": 1408,
-        "short_edge": 1408,
-        "tier": "1080p+",
+        "score": 0.3,
+        "width": 640,
+        "height": 480,
+        "short_edge": 480,
+        "tier": "480p",
         "method": "piecewise_continuous",
-        "source": "catalog",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Acc-ML"
       },
       "modality_richness": {
         "modalities_present": [
-          "Audio",
-          "Eye gaze",
-          "IMU",
-          "Multi-view",
-          "RGB video",
-          "mmWave"
+          "3D point clouds",
+          "Hand pose annotations",
+          "RGB video"
         ],
-        "modality_count": 6,
+        "modality_count": 3,
         "scores_by_usecase": {
           "manipulation": {
             "critical": {
@@ -54,31 +51,31 @@
               "ratio": 0.5
             },
             "important": {
-              "present": [],
+              "present": [
+                "Hand pose annotations"
+              ],
               "missing": [
-                "Hand pose annotations",
                 "Tactile",
                 "Force/torque",
                 "Narrations/captions",
                 "Proprioception",
                 "Gripper state"
               ],
-              "ratio": 0.0
+              "ratio": 0.17
             },
             "bonus": {
-              "present": [
-                "Audio",
-                "IMU"
-              ],
+              "present": [],
               "missing": [
+                "Audio",
+                "IMU",
                 "Optical flow",
                 "Object bounding boxes",
                 "End-effector pose",
                 "Segmentation masks"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
-            "score": 0.16
+            "score": 0.162
           },
           "action_recognition": {
             "critical": {
@@ -89,37 +86,35 @@
               "ratio": 1.0
             },
             "important": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
+                "Audio",
                 "Narrations/captions",
                 "Optical flow"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
             "bonus": {
               "present": [
-                "Eye gaze",
-                "IMU"
+                "Hand pose annotations"
               ],
               "missing": [
-                "Hand pose annotations",
+                "Eye gaze",
+                "IMU",
                 "Object bounding boxes"
               ],
-              "ratio": 0.5
+              "ratio": 0.25
             },
-            "score": 0.753
+            "score": 0.63
           },
           "hand_pose_estimation": {
             "critical": {
               "present": [
-                "RGB video"
-              ],
-              "missing": [
+                "RGB video",
                 "Hand pose annotations"
               ],
-              "ratio": 0.5
+              "missing": [],
+              "ratio": 1.0
             },
             "important": {
               "present": [],
@@ -130,47 +125,47 @@
               "ratio": 0.0
             },
             "bonus": {
-              "present": [
-                "IMU"
-              ],
+              "present": [],
               "missing": [
                 "Tactile",
+                "IMU",
                 "Segmentation masks"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
-            "score": 0.16
+            "score": 0.6
           },
           "navigation": {
             "critical": {
               "present": [
-                "RGB video",
+                "RGB video"
+              ],
+              "missing": [
                 "IMU"
               ],
-              "missing": [],
-              "ratio": 1.0
+              "ratio": 0.5
             },
             "important": {
-              "present": [],
-              "missing": [
-                "Depth",
-                "SLAM/odometry",
+              "present": [
                 "3D point clouds"
               ],
-              "ratio": 0.0
+              "missing": [
+                "Depth",
+                "SLAM/odometry"
+              ],
+              "ratio": 0.33
             },
             "bonus": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
+                "Audio",
                 "Stereo",
                 "LiDAR",
                 "Segmentation masks"
               ],
-              "ratio": 0.25
+              "ratio": 0.0
             },
-            "score": 0.63
+            "score": 0.173
           },
           "robot_policy_learning": {
             "critical": {
@@ -194,16 +189,15 @@
               "ratio": 0.0
             },
             "bonus": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
                 "Tactile",
+                "Audio",
                 "Joint torques"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
-            "score": 0.071
+            "score": 0.067
           },
           "vla_pretraining": {
             "critical": {
@@ -216,27 +210,27 @@
               "ratio": 0.5
             },
             "important": {
-              "present": [],
+              "present": [
+                "Hand pose annotations"
+              ],
               "missing": [
                 "Depth",
-                "Hand pose annotations",
                 "Proprioception"
               ],
-              "ratio": 0.0
+              "ratio": 0.33
             },
             "bonus": {
-              "present": [
+              "present": [],
+              "missing": [
                 "Audio",
                 "IMU",
-                "Eye gaze"
-              ],
-              "missing": [
+                "Eye gaze",
                 "SLAM/odometry",
                 "Optical flow"
               ],
-              "ratio": 0.6
+              "ratio": 0.0
             },
-            "score": 0.168
+            "score": 0.173
           }
         },
         "source": "catalog",
@@ -245,56 +239,56 @@
       "camera_calibration": {
         "score": 0.85,
         "tier": "intrinsics_extrinsics_unvalidated",
-        "notes": "Project Aria provides intrinsics + extrinsics + distortion (F-Theta model) per hardware spec. EgoLife paper does not separately describe calibration procedure.",
+        "notes": "Extrinsics confirmed in AssemblyPoses.zip. Intrinsics and distortion inferred from 3D hand pose reconstruction pipeline (18M poses require full calibration). Models not explicitly documented in paper.",
         "method": "tier",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Aud-ML"
       },
       "license_clarity": {
-        "score": 0.5,
-        "license_type": "S-Lab License",
-        "tier": "custom_named",
-        "commercial_use": "Unclear (S-Lab license terms not fully public)",
+        "score": 1.0,
+        "license_type": "CC-BY-NC-4.0",
+        "tier": "standard",
+        "commercial_use": "No",
         "method": "tier",
         "source": "catalog",
         "iso_mapping": "Cpl-ML"
       },
       "accessibility": {
-        "score": 0.7,
-        "raw_score": 7.0,
-        "access_level": "Gated-Open",
+        "score": 0.875,
+        "raw_score": 8.75,
+        "access_level": "Open",
         "url_status": "Live",
         "method": "weighted_sum_normalized",
         "source": "catalog",
         "iso_mapping": "Acs-ML"
       },
       "scale": {
-        "score": 0.62,
-        "total_hours": 300.0,
+        "score": 0.678,
+        "total_hours": 513.0,
         "method": "log10(hrs+1)/log10(10001)",
         "source": "catalog",
         "iso_mapping": "Eff-ML"
       },
       "dataloader": {
-        "score": 0.8,
-        "available": true,
-        "framework": "unspecified",
+        "score": 0.0,
+        "available": false,
+        "framework": null,
         "method": "tier",
         "source": "catalog",
         "iso_mapping": "Acs-ML"
       },
       "documentation_quality": {
-        "score": 0.667,
-        "rating": 2,
+        "score": 1.0,
+        "rating": 3,
         "method": "normalized_0_3",
         "source": "catalog",
         "iso_mapping": "Und-ML"
       },
       "annotation_coverage": {
-        "score": null,
-        "notes": "JSON captions, QA pairs, transcripts for structured activities. Coverage fraction not stated in paper.",
+        "score": 1.0,
+        "notes": "100K coarse + 1M fine-grained action segments across 513h. 18M 3D hand poses (all frames). Temporal coverage ~100%. Object and mistake annotations also available.",
         "method": "ratio",
-        "source": "pending_paper_review",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Com-ML"
       },
       "download_efficiency": {
@@ -307,15 +301,15 @@
         "iso_mapping": "Eff-ML"
       },
       "environment_diversity": {
-        "score": 0.108,
-        "unique_environments": 1.0,
+        "score": null,
+        "unique_environments": null,
         "method": "log_normalized",
         "source": "catalog",
         "iso_mapping": "Div-ML"
       },
       "demographic_diversity": {
-        "score": 0.203,
-        "participants": 6.0,
+        "score": 0.417,
+        "participants": 53.0,
         "geographic_locations": 1,
         "method": "log_normalized_product",
         "source": "catalog+paper",
@@ -324,16 +318,16 @@
     },
     "classifications": {
       "capture_device": {
-        "value": "Project Aria (ego) + GoPro Hero (exo)",
+        "value": "4 head-mounted monochrome cameras (ego, 640\u00d7480) + 8 RGB cameras (fixed, 1920\u00d71080); specific models not stated in paper",
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Ide-ML"
       },
       "lens_type": {
-        "value": "fisheye",
-        "fov_degrees": 110,
+        "value": "rectilinear",
+        "fov_degrees": null,
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2203.14712",
         "iso_mapping": "Ide-ML"
       },
       "video_format": {
@@ -341,23 +335,23 @@
         "source": "catalog"
       },
       "annotation_format": {
-        "value": "JSON (captions; QA; transcripts)",
+        "value": "CSV; JSON",
         "source": "catalog"
       }
     },
     "context": {
-      "total_hours": 300.0,
-      "participants": "6",
-      "scenes_environments": "1 (custom EgoHouse + outdoor locations)",
-      "commercial_use": "Unclear (S-Lab license terms not fully public)",
-      "category": "Large-scale foundation",
-      "year": "2025",
-      "paper": "CVPR 2025; arXiv 2503.03803",
-      "approximate_citations": "~75",
+      "total_hours": 513.0,
+      "participants": "53",
+      "scenes_environments": "N/A",
+      "commercial_use": "No",
+      "category": "Action recognition",
+      "year": "2022",
+      "paper": "CVPR 2022 (Sener et al.); arXiv 2203.14712",
+      "approximate_citations": "~200",
       "citations": {
-        "count": 47,
+        "count": 334,
         "source": "semantic_scholar",
-        "fetched_at": "2026-04-14"
+        "fetched_at": "2026-04-17"
       },
       "no_paper": false
     },

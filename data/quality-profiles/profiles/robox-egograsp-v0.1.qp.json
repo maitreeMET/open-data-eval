@@ -1,0 +1,645 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "cr": "http://mlcommons.org/croissant/",
+    "qp": "http://opendataeval.org/qp/",
+    "iso": "http://opendataeval.org/iso5259/"
+  },
+  "@type": "cr:Dataset",
+  "name": "RoboX EgoGrasp v0.1",
+  "url": "https://huggingface.co/datasets/RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+  "dct:conformsTo": "http://opendataeval.org/qp/1.0",
+  "qp:qualityProfile": {
+    "qp:schemaVersion": "1.0",
+    "qp:evalLevel": "metadata",
+    "qp:evaluatedAt": "2026-04-17T13:00:42Z",
+    "qp:evaluatedBy": "open-data-eval",
+    "scores": {
+      "fps": {
+        "score": 1.0,
+        "raw_value": 60.0,
+        "method": "piecewise_continuous",
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Acc-ML"
+      },
+      "resolution": {
+        "score": 1.0,
+        "width": 1920,
+        "height": 1440,
+        "short_edge": 1440,
+        "tier": "1080p+",
+        "method": "piecewise_continuous",
+        "source": "catalog",
+        "iso_mapping": "Acc-ML"
+      },
+      "modality_richness": {
+        "modalities_present": [
+          "Hand pose annotations",
+          "IMU",
+          "RGB video",
+          "SLAM/odometry"
+        ],
+        "modality_count": 4,
+        "scores_by_usecase": {
+          "manipulation": {
+            "critical": {
+              "present": [
+                "RGB video"
+              ],
+              "missing": [
+                "Depth"
+              ],
+              "ratio": 0.5
+            },
+            "important": {
+              "present": [
+                "Hand pose annotations"
+              ],
+              "missing": [
+                "Tactile",
+                "Force/torque",
+                "Narrations/captions",
+                "Proprioception",
+                "Gripper state"
+              ],
+              "ratio": 0.17
+            },
+            "bonus": {
+              "present": [
+                "IMU"
+              ],
+              "missing": [
+                "Audio",
+                "Optical flow",
+                "Object bounding boxes",
+                "End-effector pose",
+                "Segmentation masks"
+              ],
+              "ratio": 0.17
+            },
+            "score": 0.167
+          },
+          "action_recognition": {
+            "critical": {
+              "present": [
+                "RGB video"
+              ],
+              "missing": [],
+              "ratio": 1.0
+            },
+            "important": {
+              "present": [],
+              "missing": [
+                "Audio",
+                "Narrations/captions",
+                "Optical flow"
+              ],
+              "ratio": 0.0
+            },
+            "bonus": {
+              "present": [
+                "Hand pose annotations",
+                "IMU"
+              ],
+              "missing": [
+                "Eye gaze",
+                "Object bounding boxes"
+              ],
+              "ratio": 0.5
+            },
+            "score": 0.66
+          },
+          "hand_pose_estimation": {
+            "critical": {
+              "present": [
+                "RGB video",
+                "Hand pose annotations"
+              ],
+              "missing": [],
+              "ratio": 1.0
+            },
+            "important": {
+              "present": [],
+              "missing": [
+                "Depth",
+                "Stereo"
+              ],
+              "ratio": 0.0
+            },
+            "bonus": {
+              "present": [
+                "IMU"
+              ],
+              "missing": [
+                "Tactile",
+                "Segmentation masks"
+              ],
+              "ratio": 0.33
+            },
+            "score": 0.64
+          },
+          "navigation": {
+            "critical": {
+              "present": [
+                "RGB video",
+                "IMU"
+              ],
+              "missing": [],
+              "ratio": 1.0
+            },
+            "important": {
+              "present": [
+                "SLAM/odometry"
+              ],
+              "missing": [
+                "Depth",
+                "3D point clouds"
+              ],
+              "ratio": 0.33
+            },
+            "bonus": {
+              "present": [],
+              "missing": [
+                "Audio",
+                "Stereo",
+                "LiDAR",
+                "Segmentation masks"
+              ],
+              "ratio": 0.0
+            },
+            "score": 0.693
+          },
+          "robot_policy_learning": {
+            "critical": {
+              "present": [
+                "RGB video"
+              ],
+              "missing": [
+                "Proprioception",
+                "Gripper state"
+              ],
+              "ratio": 0.33
+            },
+            "important": {
+              "present": [],
+              "missing": [
+                "Depth",
+                "End-effector pose",
+                "Narrations/captions",
+                "Force/torque"
+              ],
+              "ratio": 0.0
+            },
+            "bonus": {
+              "present": [],
+              "missing": [
+                "Tactile",
+                "Audio",
+                "Joint torques"
+              ],
+              "ratio": 0.0
+            },
+            "score": 0.067
+          },
+          "vla_pretraining": {
+            "critical": {
+              "present": [
+                "RGB video"
+              ],
+              "missing": [
+                "Narrations/captions"
+              ],
+              "ratio": 0.5
+            },
+            "important": {
+              "present": [
+                "Hand pose annotations"
+              ],
+              "missing": [
+                "Depth",
+                "Proprioception"
+              ],
+              "ratio": 0.33
+            },
+            "bonus": {
+              "present": [
+                "IMU",
+                "SLAM/odometry"
+              ],
+              "missing": [
+                "Audio",
+                "Eye gaze",
+                "Optical flow"
+              ],
+              "ratio": 0.4
+            },
+            "score": 0.185
+          }
+        },
+        "source": "catalog",
+        "iso_mapping": "Div-ML"
+      },
+      "camera_calibration": {
+        "score": 0.35,
+        "tier": "intrinsics_only",
+        "notes": "Per-frame camera intrinsics (3x3 matrix: fx, fy, cx, cy) from ARKit in sensors.jsonl. Output video is ARKit-undistorted. No distortion parameters provided in dataset files. Sensor intrinsics (1920\u00d71440) match actual video resolution (confirmed by ffprobe); clips.json metadata incorrectly claimed 1920\u00d71080.",
+        "method": "tier",
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Aud-ML"
+      },
+      "license_clarity": {
+        "score": 1.0,
+        "license_type": "CC-BY-NC-4.0",
+        "tier": "standard",
+        "commercial_use": "No",
+        "method": "tier",
+        "source": "catalog",
+        "iso_mapping": "Cpl-ML"
+      },
+      "accessibility": {
+        "score": 0.825,
+        "raw_score": 8.25,
+        "access_level": "Open",
+        "url_status": "Live",
+        "method": "weighted_sum_normalized",
+        "source": "catalog",
+        "iso_mapping": "Acs-ML"
+      },
+      "scale": {
+        "score": 0.003,
+        "total_hours": 0.026,
+        "method": "log10(hrs+1)/log10(10001)",
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Eff-ML"
+      },
+      "dataloader": {
+        "score": 0.0,
+        "available": false,
+        "framework": null,
+        "method": "tier",
+        "source": "catalog",
+        "iso_mapping": "Acs-ML"
+      },
+      "documentation_quality": {
+        "score": 0.667,
+        "rating": 2,
+        "method": "normalized_0_3",
+        "source": "catalog",
+        "iso_mapping": "Und-ML"
+      },
+      "annotation_coverage": {
+        "score": 1.0,
+        "notes": "All 10 clips annotated: per-frame 21-joint 2D+3D hand keypoints (both hands, grip type, finger curl angles), action segments (grasp/idle), and per-frame sensor data (IMU + 6DoF camera pose). Object tracks present for 1/10 clips only. AI-assisted annotations via Gemini 2.5 Flash Lite, human-verified.",
+        "method": "ratio",
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Com-ML"
+      },
+      "download_efficiency": {
+        "score": 0.538,
+        "hours_per_gb": 0.1204,
+        "total_hours": 0.026,
+        "download_size_gb": 0.216,
+        "method": "percentile_rank",
+        "source": "catalog+paper",
+        "iso_mapping": "Eff-ML"
+      },
+      "environment_diversity": {
+        "score": null,
+        "unique_environments": null,
+        "method": "log_normalized",
+        "source": "catalog",
+        "iso_mapping": "Div-ML"
+      },
+      "demographic_diversity": {
+        "score": 0.115,
+        "participants": 2.0,
+        "geographic_locations": 1,
+        "method": "log_normalized_product",
+        "source": "catalog+paper",
+        "iso_mapping": "Div-ML"
+      }
+    },
+    "classifications": {
+      "capture_device": {
+        "value": "Smartphone (iPhone; crowdsourced via RoboX mobile app)",
+        "documented": true,
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Ide-ML"
+      },
+      "lens_type": {
+        "value": "rectilinear",
+        "fov_degrees": null,
+        "documented": true,
+        "source": "paper:HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
+        "iso_mapping": "Ide-ML"
+      },
+      "video_format": {
+        "value": "MP4 (H.265)",
+        "source": "catalog"
+      },
+      "annotation_format": {
+        "value": "JSON/JSONL",
+        "source": "catalog"
+      }
+    },
+    "context": {
+      "total_hours": 0.026,
+      "participants": "2",
+      "scenes_environments": "Not specified (crowdsourced, varied)",
+      "commercial_use": "No",
+      "category": "Hand-object interaction",
+      "year": "2026",
+      "paper": "None",
+      "approximate_citations": "0",
+      "citations": null,
+      "no_paper": true
+    },
+    "confidence": {
+      "metadata_completeness": {
+        "score": 0.938,
+        "filled_fields": 15,
+        "total_fields": 16,
+        "method": "ratio",
+        "iso_mapping": [
+          "Com-ML",
+          "Und-ML"
+        ]
+      }
+    },
+    "file_eval": {
+      "eval_type": "file",
+      "evaluated_at": "2026-04-17T13:00:49.054170+00:00",
+      "dataset_path": "/Users/varun/Downloads/RoboX-EgoGrasp-v0.1",
+      "summary": {
+        "total_files": 10,
+        "total_duration_sec": 92.605,
+        "total_hours": 0.02572,
+        "total_frames": 5554,
+        "total_size_mb": 103.15,
+        "resolutions": {
+          "1920x1440": 10
+        },
+        "codecs": {
+          "hevc": 10
+        },
+        "clips_with_audio": 0,
+        "clips_without_audio": 10
+      },
+      "distributions": {
+        "fps": {
+          "n": 10,
+          "mean": 60.0,
+          "min": 60.0,
+          "max": 60.0,
+          "std": 0.0,
+          "p5": 60.0,
+          "p95": 60.0
+        },
+        "duration_sec": {
+          "n": 10,
+          "mean": 9.2605,
+          "min": 6.4867,
+          "max": 13.555,
+          "std": 2.5133,
+          "p5": 6.4867,
+          "p95": 13.205
+        },
+        "bitrate_kbps": {
+          "n": 10,
+          "mean": 9333.4,
+          "min": 9221,
+          "max": 9488,
+          "std": 105.1202,
+          "p5": 9221,
+          "p95": 9445
+        },
+        "nb_frames": {
+          "n": 10,
+          "mean": 555.4,
+          "min": 389,
+          "max": 813,
+          "std": 150.756,
+          "p5": 389,
+          "p95": 792
+        },
+        "file_size_mb": {
+          "n": 10,
+          "mean": 10.315,
+          "min": 7.289,
+          "max": 15.12,
+          "std": 2.8299,
+          "p5": 7.289,
+          "p95": 14.947
+        }
+      },
+      "annotation_coverage": {
+        "actions": {
+          "clips_covered": 10,
+          "clips_total": 10,
+          "coverage_pct": 100.0,
+          "missing": null
+        },
+        "hand_keypoints": {
+          "clips_covered": 10,
+          "clips_total": 10,
+          "coverage_pct": 100.0,
+          "missing": null
+        },
+        "object_tracks": {
+          "clips_covered": 1,
+          "clips_total": 10,
+          "coverage_pct": 10.0,
+          "missing": [
+            "clip_000001",
+            "clip_000002",
+            "clip_000003",
+            "clip_000005",
+            "clip_000006",
+            "clip_000007",
+            "clip_000008",
+            "clip_000009",
+            "clip_000010"
+          ]
+        },
+        "sensors": {
+          "clips_covered": 10,
+          "clips_total": 10,
+          "coverage_pct": 100.0,
+          "missing": null
+        }
+      },
+      "discrepancies": [
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000001",
+          "field": "total_frames",
+          "claimed": 165,
+          "actual": 792,
+          "delta": 627,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000001",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000002",
+          "field": "total_frames",
+          "claimed": 100,
+          "actual": 544,
+          "delta": 444,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000002",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000003",
+          "field": "total_frames",
+          "claimed": 74,
+          "actual": 417,
+          "delta": 343,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000003",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000004",
+          "field": "total_frames",
+          "claimed": 68,
+          "actual": 389,
+          "delta": 321,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000004",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000005",
+          "field": "total_frames",
+          "claimed": 80,
+          "actual": 417,
+          "delta": 337,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000005",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000006",
+          "field": "total_frames",
+          "claimed": 85,
+          "actual": 480,
+          "delta": 395,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000006",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000007",
+          "field": "total_frames",
+          "claimed": 125,
+          "actual": 640,
+          "delta": 515,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000007",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000008",
+          "field": "total_frames",
+          "claimed": 97,
+          "actual": 499,
+          "delta": 402,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000008",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000009",
+          "field": "total_frames",
+          "claimed": 107,
+          "actual": 563,
+          "delta": 456,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000009",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000010",
+          "field": "total_frames",
+          "claimed": 159,
+          "actual": 813,
+          "delta": 654,
+          "severity": "low"
+        },
+        {
+          "source": "metadata/clips.json",
+          "clip_id": "clip_000010",
+          "field": "resolution",
+          "claimed": "1920x1080",
+          "actual": "1920x1440",
+          "severity": "medium"
+        }
+      ]
+    }
+  }
+}

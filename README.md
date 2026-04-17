@@ -2,8 +2,8 @@
 
 > What is good data? We're building the systematic quality evaluation suite for AI/ML datasets.
 
-[![Datasets Audited](https://img.shields.io/badge/datasets%20audited-105-blue)](https://github.com/Varun-Nair/open-data-eval)
-[![Quality Profiles](https://img.shields.io/badge/quality%20profiles-17-5b21b6)](https://varun-nair.github.io/open-data-eval/scorecard/)
+[![Datasets Audited](https://img.shields.io/badge/datasets%20audited-106-blue)](https://github.com/Varun-Nair/open-data-eval)
+[![Quality Profiles](https://img.shields.io/badge/quality%20profiles-26-5b21b6)](https://varun-nair.github.io/open-data-eval/scorecard/)
 [![Live Scorecard](https://img.shields.io/badge/scorecard-live-059669)](https://varun-nair.github.io/open-data-eval/scorecard/)
 [![ISO 5259-2](https://img.shields.io/badge/ISO%205259--2-aligned-0369a1)](https://www.iso.org/standard/81088.html)
 [![License](https://img.shields.io/badge/license-CC--BY--4.0-green)](LICENSE)
@@ -17,7 +17,7 @@ We audit ML datasets the way code gets audited — systematically, quantitativel
 
 **[varun-nair.github.io/open-data-eval/scorecard/](https://varun-nair.github.io/open-data-eval/scorecard/)**
 
-Interactive quality profiles for 17 egocentric and manipulation datasets. Scores computed from catalog metadata and paper research. ISO/IEC 5259-2 aligned.
+Interactive quality profiles for 26 egocentric and manipulation datasets. Scores computed from catalog metadata and paper research. ISO/IEC 5259-2 aligned.
 
 ![Scorecard preview](docs/assets/scorecard-preview.png)
 
@@ -47,16 +47,16 @@ Interactive quality profiles for 17 egocentric and manipulation datasets. Scores
 
 ## Dataset Catalog
 
-105 egocentric video datasets audited across 33 fields each.
+106 egocentric video datasets audited across 33 fields each.
 
 | Metric | Value |
 |--------|-------|
-| Datasets audited | 105 |
+| Datasets audited | 106 |
 | Total video hours | 135,000+ |
-| Fully accessible | 95 (91%) |
+| Fully accessible | 95 (90%) |
 | Broken downloads | 5 (5%) |
 | Dead links | 2 (2%) |
-| **No license specified** | **67 of 105 (64%)** |
+| **No license specified** | **67 of 106 (63%)** |
 
 ### URL Status
 ```
@@ -90,12 +90,12 @@ Mixed               █ 1
 Custom Open         █ 1
 ```
 
-### Modalities (across all 105 datasets)
+### Modalities (across all 106 datasets)
 ```
-RGB Video           ████████████████████████████████████████████ 105
+RGB Video           ████████████████████████████████████████████ 106
 Eye Gaze            █████████████ 31
-IMU                 ██████████ 24
-Hand Pose           ██████████ 24
+IMU                 █████████████ 25
+Hand Pose           █████████████ 25
 Body Pose           █████████ 22
 Depth (RGB-D)       ████████ 20
 Audio               ████████ 19
@@ -168,7 +168,7 @@ Each dataset gets a machine-readable Quality Profile (QP) — a structured recor
 - **ISO/IEC 5259-2 aligned** — 9 of 23 quality characteristics mapped at metadata level
 - **Progressively enriched** — metadata → file → frame → content (each phase adds depth)
 
-17 profiles live in [`data/quality-profiles/profiles/`](data/quality-profiles/profiles/).
+26 profiles live in [`data/quality-profiles/profiles/`](data/quality-profiles/profiles/).
 
 **Example: `data/quality-profiles/profiles/ego4d.qp.json`**
 
@@ -251,9 +251,9 @@ Each profile also includes 4 classifications (device, lens, video format, annota
 
 ## Roadmap
 
-- [x] Phase 0: Dataset catalog — 105 ego datasets, 33 fields each
-- [x] Phase 1a: Metadata Eval — quality profiles for 17 datasets, live scorecard
-- [ ] Phase 1b: File Eval — ffprobe verification on downloaded files (codec, actual fps, corruption)
+- [x] Phase 0: Dataset catalog — 106 ego datasets, 33 fields each
+- [x] Phase 1a: Metadata Eval — quality profiles for 26 datasets, live scorecard
+- [x] Phase 1b: File Eval — ffprobe pipeline (eval/file_eval.py); first run on RoboX EgoGrasp v0.1
 - [ ] Phase 1c: Frame Eval — ML models on sampled frames (hand visibility, blur, occlusion)
 - [ ] Phase 2: Robot dataset catalog
 - [ ] Phase 3: Derivative scoring — which data produces better models?

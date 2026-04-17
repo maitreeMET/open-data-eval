@@ -6,8 +6,8 @@
     "iso": "http://opendataeval.org/iso5259/"
   },
   "@type": "cr:Dataset",
-  "name": "EgoLife",
-  "url": "https://egolife-ai.github.io/blog/",
+  "name": "Aria Digital Twin (ADT)",
+  "url": "https://www.projectaria.com/datasets/adt/",
   "dct:conformsTo": "http://opendataeval.org/qp/1.0",
   "qp:qualityProfile": {
     "qp:schemaVersion": "1.0",
@@ -19,7 +19,7 @@
         "score": 1.0,
         "raw_value": 30.0,
         "method": "piecewise_continuous",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Acc-ML"
       },
       "resolution": {
@@ -29,29 +29,29 @@
         "short_edge": 1408,
         "tier": "1080p+",
         "method": "piecewise_continuous",
-        "source": "catalog",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Acc-ML"
       },
       "modality_richness": {
         "modalities_present": [
-          "Audio",
+          "3D scene reconstruction",
+          "Body pose annotations",
+          "Depth",
           "Eye gaze",
           "IMU",
-          "Multi-view",
           "RGB video",
-          "mmWave"
+          "SLAM/odometry"
         ],
-        "modality_count": 6,
+        "modality_count": 7,
         "scores_by_usecase": {
           "manipulation": {
             "critical": {
               "present": [
-                "RGB video"
-              ],
-              "missing": [
+                "RGB video",
                 "Depth"
               ],
-              "ratio": 0.5
+              "missing": [],
+              "ratio": 1.0
             },
             "important": {
               "present": [],
@@ -67,18 +67,18 @@
             },
             "bonus": {
               "present": [
-                "Audio",
                 "IMU"
               ],
               "missing": [
+                "Audio",
                 "Optical flow",
                 "Object bounding boxes",
                 "End-effector pose",
                 "Segmentation masks"
               ],
-              "ratio": 0.33
+              "ratio": 0.17
             },
-            "score": 0.16
+            "score": 0.62
           },
           "action_recognition": {
             "critical": {
@@ -89,14 +89,13 @@
               "ratio": 1.0
             },
             "important": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
+                "Audio",
                 "Narrations/captions",
                 "Optical flow"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
             "bonus": {
               "present": [
@@ -109,7 +108,7 @@
               ],
               "ratio": 0.5
             },
-            "score": 0.753
+            "score": 0.66
           },
           "hand_pose_estimation": {
             "critical": {
@@ -122,12 +121,13 @@
               "ratio": 0.5
             },
             "important": {
-              "present": [],
+              "present": [
+                "Depth"
+              ],
               "missing": [
-                "Depth",
                 "Stereo"
               ],
-              "ratio": 0.0
+              "ratio": 0.5
             },
             "bonus": {
               "present": [
@@ -139,7 +139,7 @@
               ],
               "ratio": 0.33
             },
-            "score": 0.16
+            "score": 0.195
           },
           "navigation": {
             "critical": {
@@ -151,26 +151,26 @@
               "ratio": 1.0
             },
             "important": {
-              "present": [],
-              "missing": [
+              "present": [
                 "Depth",
-                "SLAM/odometry",
+                "SLAM/odometry"
+              ],
+              "missing": [
                 "3D point clouds"
               ],
-              "ratio": 0.0
+              "ratio": 0.67
             },
             "bonus": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
+                "Audio",
                 "Stereo",
                 "LiDAR",
                 "Segmentation masks"
               ],
-              "ratio": 0.25
+              "ratio": 0.0
             },
-            "score": 0.63
+            "score": 0.787
           },
           "robot_policy_learning": {
             "critical": {
@@ -184,26 +184,26 @@
               "ratio": 0.33
             },
             "important": {
-              "present": [],
+              "present": [
+                "Depth"
+              ],
               "missing": [
-                "Depth",
                 "End-effector pose",
                 "Narrations/captions",
                 "Force/torque"
               ],
-              "ratio": 0.0
+              "ratio": 0.25
             },
             "bonus": {
-              "present": [
-                "Audio"
-              ],
+              "present": [],
               "missing": [
                 "Tactile",
+                "Audio",
                 "Joint torques"
               ],
-              "ratio": 0.33
+              "ratio": 0.0
             },
-            "score": 0.071
+            "score": 0.074
           },
           "vla_pretraining": {
             "critical": {
@@ -216,52 +216,53 @@
               "ratio": 0.5
             },
             "important": {
-              "present": [],
+              "present": [
+                "Depth"
+              ],
               "missing": [
-                "Depth",
                 "Hand pose annotations",
                 "Proprioception"
               ],
-              "ratio": 0.0
+              "ratio": 0.33
             },
             "bonus": {
               "present": [
-                "Audio",
                 "IMU",
-                "Eye gaze"
+                "Eye gaze",
+                "SLAM/odometry"
               ],
               "missing": [
-                "SLAM/odometry",
+                "Audio",
                 "Optical flow"
               ],
               "ratio": 0.6
             },
-            "score": 0.168
+            "score": 0.191
           }
         },
         "source": "catalog",
         "iso_mapping": "Div-ML"
       },
       "camera_calibration": {
-        "score": 0.85,
-        "tier": "intrinsics_extrinsics_unvalidated",
-        "notes": "Project Aria provides intrinsics + extrinsics + distortion (F-Theta model) per hardware spec. EgoLife paper does not separately describe calibration procedure.",
+        "score": 1.0,
+        "tier": "intrinsics_extrinsics_validated",
+        "notes": "Project Aria MPS provides factory + online time-varying calibration: intrinsics, extrinsics, FisheyeRadTanThinPrism distortion (radial + tangential + thin-prism coefficients). Same validated pipeline as Ego-Exo4D and HOT3D.",
         "method": "tier",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Aud-ML"
       },
       "license_clarity": {
         "score": 0.5,
-        "license_type": "S-Lab License",
+        "license_type": "Custom Academic",
         "tier": "custom_named",
-        "commercial_use": "Unclear (S-Lab license terms not fully public)",
+        "commercial_use": "No",
         "method": "tier",
         "source": "catalog",
         "iso_mapping": "Cpl-ML"
       },
       "accessibility": {
-        "score": 0.7,
-        "raw_score": 7.0,
+        "score": 0.775,
+        "raw_score": 7.75,
         "access_level": "Gated-Open",
         "url_status": "Live",
         "method": "weighted_sum_normalized",
@@ -269,8 +270,8 @@
         "iso_mapping": "Acs-ML"
       },
       "scale": {
-        "score": 0.62,
-        "total_hours": 300.0,
+        "score": null,
+        "total_hours": null,
         "method": "log10(hrs+1)/log10(10001)",
         "source": "catalog",
         "iso_mapping": "Eff-ML"
@@ -284,17 +285,17 @@
         "iso_mapping": "Acs-ML"
       },
       "documentation_quality": {
-        "score": 0.667,
-        "rating": 2,
+        "score": 1.0,
+        "rating": 3,
         "method": "normalized_0_3",
         "source": "catalog",
         "iso_mapping": "Und-ML"
       },
       "annotation_coverage": {
-        "score": null,
-        "notes": "JSON captions, QA pairs, transcripts for structured activities. Coverage fraction not stated in paper.",
+        "score": 1.0,
+        "notes": "Per-frame ground truth for all 236 sequences: 6-DoF object poses (398 instances), instance segmentation masks, metric depth maps, eye gaze vectors, 3D human poses via MoCap suit.",
         "method": "ratio",
-        "source": "pending_paper_review",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Com-ML"
       },
       "download_efficiency": {
@@ -307,16 +308,16 @@
         "iso_mapping": "Eff-ML"
       },
       "environment_diversity": {
-        "score": 0.108,
-        "unique_environments": 1.0,
+        "score": 0.171,
+        "unique_environments": 2.0,
         "method": "log_normalized",
         "source": "catalog",
         "iso_mapping": "Div-ML"
       },
       "demographic_diversity": {
-        "score": 0.203,
-        "participants": 6.0,
-        "geographic_locations": 1,
+        "score": null,
+        "participants": null,
+        "geographic_locations": null,
         "method": "log_normalized_product",
         "source": "catalog+paper",
         "iso_mapping": "Div-ML"
@@ -324,47 +325,47 @@
     },
     "classifications": {
       "capture_device": {
-        "value": "Project Aria (ego) + GoPro Hero (exo)",
+        "value": "Project Aria Gen 1 glasses",
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Ide-ML"
       },
       "lens_type": {
         "value": "fisheye",
         "fov_degrees": 110,
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2306.06362",
         "iso_mapping": "Ide-ML"
       },
       "video_format": {
-        "value": "MP4",
+        "value": "VRS (Aria)",
         "source": "catalog"
       },
       "annotation_format": {
-        "value": "JSON (captions; QA; transcripts)",
+        "value": "JSON; segmentation masks; depth maps; 6DoF poses",
         "source": "catalog"
       }
     },
     "context": {
-      "total_hours": 300.0,
-      "participants": "6",
-      "scenes_environments": "1 (custom EgoHouse + outdoor locations)",
-      "commercial_use": "Unclear (S-Lab license terms not fully public)",
-      "category": "Large-scale foundation",
-      "year": "2025",
-      "paper": "CVPR 2025; arXiv 2503.03803",
-      "approximate_citations": "~75",
+      "total_hours": null,
+      "participants": "Not specified",
+      "scenes_environments": "2 indoor scenes (apartment + office)",
+      "commercial_use": "No",
+      "category": "3D reconstruction",
+      "year": "2023",
+      "paper": "arXiv 2306.06362 (Pan et al. 2023)",
+      "approximate_citations": "~100",
       "citations": {
-        "count": 47,
+        "count": 138,
         "source": "semantic_scholar",
-        "fetched_at": "2026-04-14"
+        "fetched_at": "2026-04-17"
       },
       "no_paper": false
     },
     "confidence": {
       "metadata_completeness": {
-        "score": 0.875,
-        "filled_fields": 14,
+        "score": 0.812,
+        "filled_fields": 13,
         "total_fields": 16,
         "method": "ratio",
         "iso_mapping": [

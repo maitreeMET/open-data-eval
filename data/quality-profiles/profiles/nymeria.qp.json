@@ -6,8 +6,8 @@
     "iso": "http://opendataeval.org/iso5259/"
   },
   "@type": "cr:Dataset",
-  "name": "EgoLife",
-  "url": "https://egolife-ai.github.io/blog/",
+  "name": "Nymeria",
+  "url": "https://www.projectaria.com/datasets/nymeria/",
   "dct:conformsTo": "http://opendataeval.org/qp/1.0",
   "qp:qualityProfile": {
     "qp:schemaVersion": "1.0",
@@ -19,7 +19,7 @@
         "score": 1.0,
         "raw_value": 30.0,
         "method": "piecewise_continuous",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Acc-ML"
       },
       "resolution": {
@@ -29,19 +29,22 @@
         "short_edge": 1408,
         "tier": "1080p+",
         "method": "piecewise_continuous",
-        "source": "catalog",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Acc-ML"
       },
       "modality_richness": {
         "modalities_present": [
+          "3D point clouds",
           "Audio",
+          "Body pose annotations",
           "Eye gaze",
           "IMU",
-          "Multi-view",
+          "Motion capture",
+          "Narrations/captions",
           "RGB video",
-          "mmWave"
+          "SLAM/odometry"
         ],
-        "modality_count": 6,
+        "modality_count": 9,
         "scores_by_usecase": {
           "manipulation": {
             "critical": {
@@ -54,16 +57,17 @@
               "ratio": 0.5
             },
             "important": {
-              "present": [],
+              "present": [
+                "Narrations/captions"
+              ],
               "missing": [
                 "Hand pose annotations",
                 "Tactile",
                 "Force/torque",
-                "Narrations/captions",
                 "Proprioception",
                 "Gripper state"
               ],
-              "ratio": 0.0
+              "ratio": 0.17
             },
             "bonus": {
               "present": [
@@ -78,7 +82,7 @@
               ],
               "ratio": 0.33
             },
-            "score": 0.16
+            "score": 0.172
           },
           "action_recognition": {
             "critical": {
@@ -90,13 +94,13 @@
             },
             "important": {
               "present": [
-                "Audio"
+                "Audio",
+                "Narrations/captions"
               ],
               "missing": [
-                "Narrations/captions",
                 "Optical flow"
               ],
-              "ratio": 0.33
+              "ratio": 0.67
             },
             "bonus": {
               "present": [
@@ -109,7 +113,7 @@
               ],
               "ratio": 0.5
             },
-            "score": 0.753
+            "score": 0.847
           },
           "hand_pose_estimation": {
             "critical": {
@@ -151,13 +155,14 @@
               "ratio": 1.0
             },
             "important": {
-              "present": [],
-              "missing": [
-                "Depth",
+              "present": [
                 "SLAM/odometry",
                 "3D point clouds"
               ],
-              "ratio": 0.0
+              "missing": [
+                "Depth"
+              ],
+              "ratio": 0.67
             },
             "bonus": {
               "present": [
@@ -170,7 +175,7 @@
               ],
               "ratio": 0.25
             },
-            "score": 0.63
+            "score": 0.817
           },
           "robot_policy_learning": {
             "critical": {
@@ -184,14 +189,15 @@
               "ratio": 0.33
             },
             "important": {
-              "present": [],
+              "present": [
+                "Narrations/captions"
+              ],
               "missing": [
                 "Depth",
                 "End-effector pose",
-                "Narrations/captions",
                 "Force/torque"
               ],
-              "ratio": 0.0
+              "ratio": 0.25
             },
             "bonus": {
               "present": [
@@ -203,17 +209,16 @@
               ],
               "ratio": 0.33
             },
-            "score": 0.071
+            "score": 0.079
           },
           "vla_pretraining": {
             "critical": {
               "present": [
-                "RGB video"
-              ],
-              "missing": [
+                "RGB video",
                 "Narrations/captions"
               ],
-              "ratio": 0.5
+              "missing": [],
+              "ratio": 1.0
             },
             "important": {
               "present": [],
@@ -228,40 +233,40 @@
               "present": [
                 "Audio",
                 "IMU",
-                "Eye gaze"
+                "Eye gaze",
+                "SLAM/odometry"
               ],
               "missing": [
-                "SLAM/odometry",
                 "Optical flow"
               ],
-              "ratio": 0.6
+              "ratio": 0.8
             },
-            "score": 0.168
+            "score": 0.696
           }
         },
         "source": "catalog",
         "iso_mapping": "Div-ML"
       },
       "camera_calibration": {
-        "score": 0.85,
-        "tier": "intrinsics_extrinsics_unvalidated",
-        "notes": "Project Aria provides intrinsics + extrinsics + distortion (F-Theta model) per hardware spec. EgoLife paper does not separately describe calibration procedure.",
+        "score": 1.0,
+        "tier": "intrinsics_extrinsics_validated",
+        "notes": "Aria MPS provides factory + online time-varying intrinsics/extrinsics/distortion (FisheyeRadTanThinPrism). XSens body poses aligned into Aria world frame via Hand-Eye calibration solved on 4.2ms velocity segments. Sub-millisecond hardware sync across all three device types.",
         "method": "tier",
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Aud-ML"
       },
       "license_clarity": {
-        "score": 0.5,
-        "license_type": "S-Lab License",
-        "tier": "custom_named",
-        "commercial_use": "Unclear (S-Lab license terms not fully public)",
+        "score": 1.0,
+        "license_type": "CC-BY-NC-4.0",
+        "tier": "standard",
+        "commercial_use": "No",
         "method": "tier",
         "source": "catalog",
         "iso_mapping": "Cpl-ML"
       },
       "accessibility": {
-        "score": 0.7,
-        "raw_score": 7.0,
+        "score": 0.875,
+        "raw_score": 8.75,
         "access_level": "Gated-Open",
         "url_status": "Live",
         "method": "weighted_sum_normalized",
@@ -284,38 +289,38 @@
         "iso_mapping": "Acs-ML"
       },
       "documentation_quality": {
-        "score": 0.667,
-        "rating": 2,
+        "score": 1.0,
+        "rating": 3,
         "method": "normalized_0_3",
         "source": "catalog",
         "iso_mapping": "Und-ML"
       },
       "annotation_coverage": {
-        "score": null,
-        "notes": "JSON captions, QA pairs, transcripts for structured activities. Coverage fraction not stated in paper.",
+        "score": 1.0,
+        "notes": "All 300h / 1200 sequences have full-body XSens MoCap at 240Hz (260M body poses). Language: 310.5K sentences at fine (5s), atomic, and summary (30s) granularities. 201.2M images, 11.7B IMU samples, 10.8M gaze points.",
         "method": "ratio",
-        "source": "pending_paper_review",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Com-ML"
       },
       "download_efficiency": {
-        "score": null,
-        "hours_per_gb": null,
-        "total_hours": null,
-        "download_size_gb": null,
+        "score": 0.154,
+        "hours_per_gb": 0.0043,
+        "total_hours": 300.0,
+        "download_size_gb": 70000,
         "method": "percentile_rank",
         "source": "catalog+paper",
         "iso_mapping": "Eff-ML"
       },
       "environment_diversity": {
-        "score": 0.108,
-        "unique_environments": 1.0,
+        "score": 0.613,
+        "unique_environments": 50.0,
         "method": "log_normalized",
         "source": "catalog",
         "iso_mapping": "Div-ML"
       },
       "demographic_diversity": {
-        "score": 0.203,
-        "participants": 6.0,
+        "score": 0.583,
+        "participants": 264.0,
         "geographic_locations": 1,
         "method": "log_normalized_product",
         "source": "catalog+paper",
@@ -324,47 +329,47 @@
     },
     "classifications": {
       "capture_device": {
-        "value": "Project Aria (ego) + GoPro Hero (exo)",
+        "value": "Project Aria Gen 1 glasses + XSens MVN Link MoCap suit (17 IMU trackers) + miniAria wristbands",
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Ide-ML"
       },
       "lens_type": {
         "value": "fisheye",
         "fov_degrees": 110,
         "documented": true,
-        "source": "paper:arXiv:2503.03803",
+        "source": "paper:arXiv:2406.09905",
         "iso_mapping": "Ide-ML"
       },
       "video_format": {
-        "value": "MP4",
+        "value": "VRS (Aria); image sequences",
         "source": "catalog"
       },
       "annotation_format": {
-        "value": "JSON (captions; QA; transcripts)",
+        "value": "JSON; PKL; custom",
         "source": "catalog"
       }
     },
     "context": {
       "total_hours": 300.0,
-      "participants": "6",
-      "scenes_environments": "1 (custom EgoHouse + outdoor locations)",
-      "commercial_use": "Unclear (S-Lab license terms not fully public)",
-      "category": "Large-scale foundation",
-      "year": "2025",
-      "paper": "CVPR 2025; arXiv 2503.03803",
-      "approximate_citations": "~75",
+      "participants": "264",
+      "scenes_environments": "50 locations (47 houses + 3 campus)",
+      "commercial_use": "No",
+      "category": "Body pose",
+      "year": "2024",
+      "paper": "ECCV 2024 (Ma et al.); arXiv 2406.09905",
+      "approximate_citations": "~50",
       "citations": {
-        "count": 47,
+        "count": 90,
         "source": "semantic_scholar",
-        "fetched_at": "2026-04-14"
+        "fetched_at": "2026-04-17"
       },
       "no_paper": false
     },
     "confidence": {
       "metadata_completeness": {
-        "score": 0.875,
-        "filled_fields": 14,
+        "score": 1.0,
+        "filled_fields": 16,
         "total_fields": 16,
         "method": "ratio",
         "iso_mapping": [

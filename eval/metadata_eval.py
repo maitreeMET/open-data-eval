@@ -115,6 +115,9 @@ TARGET_DATASETS = [
     "HOI4D", "HOT3D", "ARCTIC", "EgoDex", "TACO",
     "Egocentric-10K", "Egocentric-100K",
     "EgoVerse",
+    "Assembly101", "DexYCB", "EgoBody", "Aria Digital Twin (ADT)",
+    "MECCANO", "H2O", "Nymeria", "GIMO",
+    "RoboX EgoGrasp v0.1",
 ]
 
 
@@ -382,6 +385,186 @@ PAPER_METADATA = {
         "geo_locations": 1,                    # Southeast Asia (multiple countries; 1 region)
         "arxiv_id": None,
         "paper_ref": "HuggingFace:builddotai/Egocentric-100K",
+    },
+    "Assembly101": {
+        # arXiv 2203.14712 (CVPR 2022)
+        # 12 views: 4 monochrome ego (640x480) + 8 RGB fixed (1920x1080). EgoVis Distinguished Paper.
+        "capture_device": "4 head-mounted monochrome cameras (ego, 640×480) + 8 RGB cameras (fixed, 1920×1080); specific models not stated in paper",
+        "calibration_tier": 0.85,              # multi-view 3D hand pose reconstruction requires full calibration.
+                                               # AssemblyPoses.zip contains extrinsics. Intrinsics + distortion assumed from pipeline.
+        "calibration_notes": "Extrinsics confirmed in AssemblyPoses.zip. Intrinsics and distortion inferred from 3D hand pose reconstruction pipeline (18M poses require full calibration). Models not explicitly documented in paper.",
+        "lens_type": "rectilinear",            # standard RGB + monochrome cameras; no fisheye indicated
+        "fov_degrees": None,
+        "resolution_override": "640x480",      # ego-view resolution (monochrome); fixed views at 1920x1080
+        "fps_override": 30,                    # 30fps annotation rate (raw captured at 60fps, annotations at 30fps)
+        "annotation_coverage": 1.0,            # 1M fine-grained action segments cover 513h; 18M 3D hand poses
+        "annotation_notes": "100K coarse + 1M fine-grained action segments across 513h. 18M 3D hand poses (all frames). Temporal coverage ~100%. Object and mistake annotations also available.",
+        "download_size_gb": None,              # total size not published (513h multi-view = very large)
+        "geo_locations": 1,                    # single controlled lab setting
+        "arxiv_id": "2203.14712",
+        "paper_ref": "arXiv:2203.14712",
+    },
+    "DexYCB": {
+        # arXiv 2104.04631 (CVPR 2021)
+        # NVIDIA Research. 8 Azure Kinect DK cameras. 10 subjects, 20 YCB objects. 582K RGB-D frames.
+        "capture_device": "8 synchronized Azure Kinect DK cameras (1 overhead + 7 side-view)",
+        "total_hours_override": 5.4,           # 582K frames ÷ 30fps ÷ 3600 = 5.4h recording time
+        "calibration_tier": 0.85,              # Azure Kinect provides full intrinsics + extrinsics + Brown-Conrady distortion
+                                               # per-camera calibration included in dataset download. Not separately validated in paper.
+        "calibration_notes": "Azure Kinect DK factory calibration: intrinsics (fx, fy, ppx, ppy confirmed), Brown-Conrady distortion coefficients, and extrinsics for all 8 cameras. Full calibration files provided in dataset.",
+        "lens_type": "rectilinear",            # Azure Kinect RGB uses standard pinhole camera model
+        "fov_degrees": None,
+        "resolution_override": None,           # catalog already correct: 640x480
+        "fps_override": None,                  # catalog already correct: 30
+        "annotation_coverage": 1.0,            # all 582K frames have 21-joint MANO hand poses + 6D object poses
+        "annotation_notes": "All 582K RGB-D frames annotated with 21-joint MANO hand pose and 6-DoF object pose. 10 subjects × 20 YCB objects × 1000 grasp sequences.",
+        "download_size_gb": 119,               # confirmed: single tar.gz download on project page
+        "geo_locations": 1,                    # NVIDIA Research lab
+        "arxiv_id": "2104.04631",
+        "paper_ref": "arXiv:2104.04631",
+    },
+    "EgoBody": {
+        # arXiv 2112.07642 (ECCV 2022)
+        # ETH Zurich. HoloLens2 egocentric + 3-5 Azure Kinect third-person.
+        # 125 sequences, 36 participants, 15 indoor 3D scenes.
+        "capture_device": "Microsoft HoloLens2 (ego, RGB + depth) + 3–5 synchronized Azure Kinect DK (third-person RGB-D)",
+        "calibration_tier": 0.85,              # full calibration between all devices provided (intrinsics + extrinsics).
+                                               # Azure Kinect: Brown-Conrady distortion. HoloLens2: focal length 4.87mm±5%.
+                                               # Not separately validated beyond rig calibration procedure.
+        "calibration_notes": "Full multi-device calibration files provided (intrinsics + extrinsics between HoloLens2 and all Azure Kinects). Azure Kinect uses Brown-Conrady distortion model (90°×59° FOV). HoloLens2 effective focal length 4.87mm. Calibrated via multi-Kinect rig procedure.",
+        "lens_type": "rectilinear",            # HoloLens2 PV camera and Azure Kinect both rectilinear
+        "fov_degrees": None,
+        "resolution_override": "1920x1080",    # HoloLens2 RGB at 1080p30; Azure Kinect at matched resolution
+        "fps_override": 30,                    # HoloLens2 RGB: 1080p30 confirmed
+        "annotation_coverage": None,           # SMPL-X body pose for both ego wearer and interactee for all 125 sequences.
+                                               # Frame-level coverage % not stated in paper.
+        "annotation_notes": "All 125 sequences have SMPL-X body pose (shape + motion) for both the camera wearer and the interactee. 219K third-person + 199K ego RGB frames. Motion-X text labels added Oct 2023. Coverage % not explicitly stated.",
+        "download_size_gb": None,              # one component 62GB; total across all modalities not published
+        "geo_locations": 1,                    # ETH Zurich
+        "arxiv_id": "2112.07642",
+        "paper_ref": "arXiv:2112.07642",
+    },
+    "Aria Digital Twin (ADT)": {
+        # arXiv 2306.06362 (ICCV 2023)
+        # Meta Reality Labs. Project Aria Gen 1. 236 sequences in 2 photorealistic indoor scenes.
+        # 100% per-frame annotations: 6DoF object poses, instance segmentation, depth, body pose.
+        "capture_device": "Project Aria Gen 1 glasses",
+        "calibration_tier": 1.0,              # Aria MPS: factory intrinsics + time-varying online intrinsics/extrinsics +
+                                               # FisheyeRadTanThinPrism distortion model. MPS validated.
+        "calibration_notes": "Project Aria MPS provides factory + online time-varying calibration: intrinsics, extrinsics, FisheyeRadTanThinPrism distortion (radial + tangential + thin-prism coefficients). Same validated pipeline as Ego-Exo4D and HOT3D.",
+        "lens_type": "fisheye",               # Aria RGB: FisheyeRadTanThinPrism model
+        "fov_degrees": 110,                   # Aria RGB 110° FOV
+        "resolution_override": "1408x1408",   # Aria RGB native resolution
+        "fps_override": 30,                   # Aria RGB at 30fps
+        "annotation_coverage": 1.0,           # Explicitly stated: "for every frame... a complete set of ground-truth data
+                                               # at the human, object, and scene level" (6DoF poses, segmentation, depth, eye gaze)
+        "annotation_notes": "Per-frame ground truth for all 236 sequences: 6-DoF object poses (398 instances), instance segmentation masks, metric depth maps, eye gaze vectors, 3D human poses via MoCap suit.",
+        "download_size_gb": 3500,             # ~3.5 TB without MPS outputs (confirmed on dataset portal)
+        "geo_locations": 1,                   # Meta Reality Labs (2 indoor scenes: apartment + office)
+        "arxiv_id": "2306.06362",
+        "paper_ref": "arXiv:2306.06362",
+    },
+    "MECCANO": {
+        # arXiv 2010.05654 (WACV 2021); extended arXiv 2209.08691 (CVIU 2023)
+        # University of Catania. 20 subjects, toy motorbike assembly. Custom headset.
+        "capture_device": "Custom headset: Intel RealSense SR300 (RGB + structured-light depth) + Pupil Core eye tracker (200 Hz gaze)",
+        "total_hours_override": 55,            # confirmed: 20 subjects, ~2.75h each; also cross-referenced in paper
+        "calibration_tier": 0.35,             # SR300 factory intrinsics available via RealSense SDK (Inverse Brown-Conrady distortion).
+                                               # Calibration parameters not explicitly included in dataset download.
+                                               # Paper notes 0.4s temporal misalignment between RGB and depth was corrected.
+        "calibration_notes": "Intel RealSense SR300 factory calibration available via SDK (intrinsics + Inverse Brown-Conrady distortion). Extrinsics not described. Calibration files not confirmed in dataset download. Paper documents 0.4s temporal misalignment between RGB and depth channels.",
+        "lens_type": "rectilinear",           # SR300 standard RGB camera (not fisheye)
+        "fov_degrees": None,
+        "resolution_override": None,           # catalog already correct: 1920x1080 (RGB); uses this for scoring
+        "fps_override": None,                  # catalog already correct: 12
+        "annotation_coverage": None,           # 39.6K temporal action segments cover full 55h (≈100% temporal coverage).
+                                               # Spatial bounding boxes on 454.2K frames (subset). Exact % not stated in paper.
+        "annotation_notes": "39.6K action segments (61 classes) with temporal coverage of full 55h recording. 454.2K active object bounding boxes (20 classes) on a subset of frames. Gaze data at 200Hz on all sequences.",
+        "download_size_gb": None,             # not stated in paper or project page
+        "geo_locations": 2,                   # Italy (University of Catania) + United Kingdom
+        "arxiv_id": "2010.05654",
+        "paper_ref": "arXiv:2010.05654",
+    },
+    "H2O": {
+        # arXiv 2104.11181 (ICCV 2021)
+        # ETH Zurich + Microsoft. 5 Azure Kinect cameras (1 ego helmet + 4 fixed). 4 subjects.
+        # First benchmark for two-hand 3D interaction with objects.
+        "capture_device": "5 synchronized Azure Kinect DK cameras (1 helmet-mounted ego + 4 fixed third-person)",
+        "total_hours_override": 5.3,           # 571,645 frames ÷ 30fps ÷ 3600 = 5.3h
+        "calibration_tier": 0.85,             # Camera calibration via IR sphere markers + PnP for extrinsics.
+                                               # Azure Kinect: intrinsics + Brown-Conrady distortion from factory.
+                                               # Ground-truth camera poses included in dataset.
+        "calibration_notes": "Cameras calibrated using IR sphere markers + PnP algorithm for extrinsics. Azure Kinect factory intrinsics + Brown-Conrady distortion. Ground-truth camera poses provided in dataset for all 5 views. Calibration validation not described in paper.",
+        "lens_type": "rectilinear",           # Azure Kinect RGB standard pinhole model
+        "fov_degrees": None,
+        "resolution_override": "1280x1080",   # confirmed: "synchronized multi-view RGB-D at 30fps with 1280×1080 resolution"
+        "fps_override": None,                  # catalog already correct: 30
+        "annotation_coverage": None,           # per-frame hand pose + 6D object pose + action labels for most frames;
+                                               # dataset includes "annotated/not-annotated" flag — exact coverage % not stated
+        "annotation_notes": "Per-frame annotations: 21-joint 3D hand pose (both hands), 6-DoF object pose, 11-class action labels for 571K frames. Annotation flag present (0=not annotated, 1=annotated); exact coverage % not stated. Semi-automated pipeline: OpenPose + MANO fitting + temporal smoothing.",
+        "download_size_gb": None,             # not stated in paper
+        "geo_locations": 1,                   # ETH Zurich / Microsoft Research
+        "arxiv_id": "2104.11181",
+        "paper_ref": "arXiv:2104.11181",
+    },
+    "Nymeria": {
+        # arXiv 2406.09905 (ECCV 2024)
+        # Meta. World's largest in-the-wild motion-language dataset.
+        # Aria Gen 1 + XSens MVN Link + miniAria wristbands. 264 participants, 50 locations.
+        "capture_device": "Project Aria Gen 1 glasses + XSens MVN Link MoCap suit (17 IMU trackers) + miniAria wristbands",
+        "calibration_tier": 1.0,              # Aria MPS full calibration (FisheyeRadTanThinPrism) validated.
+                                               # + Hand-Eye calibration aligning XSens into Aria reference frame (solved on 4.2ms segments).
+                                               # Sub-millisecond hardware synchronization confirmed.
+        "calibration_notes": "Aria MPS provides factory + online time-varying intrinsics/extrinsics/distortion (FisheyeRadTanThinPrism). XSens body poses aligned into Aria world frame via Hand-Eye calibration solved on 4.2ms velocity segments. Sub-millisecond hardware sync across all three device types.",
+        "lens_type": "fisheye",               # Aria RGB: FisheyeRadTanThinPrism
+        "fov_degrees": 110,                   # Aria RGB 110° FOV
+        "resolution_override": "1408x1408",   # Aria RGB Gen 1 native (confirmed from Aria hardware spec; consistent with all Aria datasets)
+        "fps_override": 30,                   # Aria RGB at 30fps; XSens MoCap at 240Hz
+        "annotation_coverage": 1.0,           # 100% of 1200 sequences have XSens MoCap body poses.
+                                               # 310.5K language sentences at 3 annotation granularities (5s/atomic/30s).
+        "annotation_notes": "All 300h / 1200 sequences have full-body XSens MoCap at 240Hz (260M body poses). Language: 310.5K sentences at fine (5s), atomic, and summary (30s) granularities. 201.2M images, 11.7B IMU samples, 10.8M gaze points.",
+        "download_size_gb": 70000,            # ~70 TB confirmed on dataset portal
+        "geo_locations": 1,                   # 50 locations (47 houses + 3 campus); US (Meta)
+        "arxiv_id": "2406.09905",
+        "paper_ref": "arXiv:2406.09905",
+    },
+    "GIMO": {
+        # arXiv 2204.09443 (ECCV 2022)
+        # Stanford + Tsinghua. Gaze-informed motion prediction.
+        # HoloLens2 ego views + inertial MoCap + 3D scene scans. 11 participants.
+        "capture_device": "Microsoft HoloLens2 (ego RGB + eye gaze) + inertial MoCap suit (IMU-based body pose, 30Hz) + 3D scene scanner",
+        "calibration_tier": None,             # HoloLens2 provides intrinsics via Mixed Reality APIs but calibration
+                                               # parameters not explicitly described or included in GIMO dataset download.
+        "calibration_notes": "HoloLens2 provides camera intrinsics via Mixed Reality Toolkit API, but GIMO paper and GitHub do not document calibration parameters or whether they are included in dataset files.",
+        "lens_type": "rectilinear",           # HoloLens2 PV (RGB) camera is rectilinear standard lens
+        "fov_degrees": None,
+        "resolution_override": "1920x1080",   # HoloLens2 PV camera standard resolution (inferred; not stated in paper)
+        "fps_override": 30,                   # HoloLens2 video at 30fps; inertial MoCap at 30Hz (confirmed in paper)
+        "annotation_coverage": None,          # SMPL-X body pose for all sequences; coverage % not stated
+        "annotation_notes": "All sequences have SMPL-X body pose at 30Hz from inertial MoCap, synchronized eye gaze from HoloLens2, and 3D scene scans (OBJ/PLY). Coverage % not stated. Non-commercial gated access.",
+        "download_size_gb": None,             # not stated; encrypted download
+        "geo_locations": None,                # Stanford + Tsinghua; location count not stated
+        "arxiv_id": "2204.09443",
+        "paper_ref": "arXiv:2204.09443",
+    },
+    "RoboX EgoGrasp v0.1": {
+        # HuggingFace: RoboXTechnologies/RoboX-EgoGrasp-v0.1 (no arXiv paper)
+        # 10-clip sample of full dataset (1800+ clips). Crowdsourced via iPhone RoboX app.
+        "capture_device": "Smartphone (iPhone; crowdsourced via RoboX mobile app)",
+        "calibration_tier": 0.35,              # Per-frame ARKit 3x3 intrinsic matrix (fx, fy, cx, cy) in sensors.jsonl.
+                                               # No distortion coefficients provided; ARKit undistorts output internally.
+        "calibration_notes": "Per-frame camera intrinsics (3x3 matrix: fx, fy, cx, cy) from ARKit in sensors.jsonl. Output video is ARKit-undistorted. No distortion parameters provided in dataset files. Sensor intrinsics (1920×1440) match actual video resolution (confirmed by ffprobe); clips.json metadata incorrectly claimed 1920×1080.",
+        "lens_type": "rectilinear",            # iPhone wide-angle camera (ultrawide not indicated)
+        "fov_degrees": None,
+        "fps_override": 60,                    # All 10 clips: 60fps confirmed by ffprobe
+        "resolution_override": "1920x1440",    # ffprobe actual (4:3 iPhone native); clips.json incorrectly claims 1920x1080
+        "annotation_coverage": 1.0,            # All 10 clips have hand_keypoints + actions + sensors
+        "annotation_notes": "All 10 clips annotated: per-frame 21-joint 2D+3D hand keypoints (both hands, grip type, finger curl angles), action segments (grasp/idle), and per-frame sensor data (IMU + 6DoF camera pose). Object tracks present for 1/10 clips only. AI-assisted annotations via Gemini 2.5 Flash Lite, human-verified.",
+        "total_hours_override": 0.026,         # 92.5s total across 10 clips
+        "download_size_gb": 0.216,             # 216 MB sample
+        "geo_locations": None,                 # crowdsourced; varied global locations
+        "arxiv_id": None,                      # no paper; dataset-only release
+        "paper_ref": "HuggingFace:RoboXTechnologies/RoboX-EgoGrasp-v0.1",
     },
     "EgoVerse": {
         # arXiv 2604.07607 (submitted April 2026)

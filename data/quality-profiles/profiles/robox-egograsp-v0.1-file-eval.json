@@ -1,0 +1,440 @@
+{
+  "eval_type": "file",
+  "dataset_path": "/Users/varun/Downloads/RoboX-EgoGrasp-v0.1",
+  "evaluated_at": "2026-04-17T13:00:49.054170+00:00",
+  "summary": {
+    "total_files": 10,
+    "files_probed": 10,
+    "files_with_errors": 0,
+    "total_duration_sec": 92.605,
+    "total_hours": 0.02572,
+    "total_frames": 5554,
+    "total_size_mb": 103.15,
+    "resolutions": {
+      "1920x1440": 10
+    },
+    "codecs": {
+      "hevc": 10
+    },
+    "clips_with_audio": 0,
+    "clips_without_audio": 10
+  },
+  "distributions": {
+    "fps": {
+      "n": 10,
+      "mean": 60.0,
+      "min": 60.0,
+      "max": 60.0,
+      "std": 0.0,
+      "p5": 60.0,
+      "p95": 60.0
+    },
+    "duration_sec": {
+      "n": 10,
+      "mean": 9.2605,
+      "min": 6.4867,
+      "max": 13.555,
+      "std": 2.5133,
+      "p5": 6.4867,
+      "p95": 13.205
+    },
+    "bitrate_kbps": {
+      "n": 10,
+      "mean": 9333.4,
+      "min": 9221,
+      "max": 9488,
+      "std": 105.1202,
+      "p5": 9221,
+      "p95": 9445
+    },
+    "nb_frames": {
+      "n": 10,
+      "mean": 555.4,
+      "min": 389,
+      "max": 813,
+      "std": 150.756,
+      "p5": 389,
+      "p95": 792
+    },
+    "file_size_mb": {
+      "n": 10,
+      "mean": 10.315,
+      "min": 7.289,
+      "max": 15.12,
+      "std": 2.8299,
+      "p5": 7.289,
+      "p95": 14.947
+    }
+  },
+  "annotation_coverage": {
+    "actions": {
+      "clips_covered": 10,
+      "clips_total": 10,
+      "coverage_pct": 100.0,
+      "missing": null
+    },
+    "hand_keypoints": {
+      "clips_covered": 10,
+      "clips_total": 10,
+      "coverage_pct": 100.0,
+      "missing": null
+    },
+    "object_tracks": {
+      "clips_covered": 1,
+      "clips_total": 10,
+      "coverage_pct": 10.0,
+      "missing": [
+        "clip_000001",
+        "clip_000002",
+        "clip_000003",
+        "clip_000005",
+        "clip_000006",
+        "clip_000007",
+        "clip_000008",
+        "clip_000009",
+        "clip_000010"
+      ]
+    },
+    "sensors": {
+      "clips_covered": 10,
+      "clips_total": 10,
+      "coverage_pct": 100.0,
+      "missing": null
+    }
+  },
+  "discrepancies": [
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000001",
+      "field": "total_frames",
+      "claimed": 165,
+      "actual": 792,
+      "delta": 627,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000001",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000002",
+      "field": "total_frames",
+      "claimed": 100,
+      "actual": 544,
+      "delta": 444,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000002",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000003",
+      "field": "total_frames",
+      "claimed": 74,
+      "actual": 417,
+      "delta": 343,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000003",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000004",
+      "field": "total_frames",
+      "claimed": 68,
+      "actual": 389,
+      "delta": 321,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000004",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000005",
+      "field": "total_frames",
+      "claimed": 80,
+      "actual": 417,
+      "delta": 337,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000005",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000006",
+      "field": "total_frames",
+      "claimed": 85,
+      "actual": 480,
+      "delta": 395,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000006",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000007",
+      "field": "total_frames",
+      "claimed": 125,
+      "actual": 640,
+      "delta": 515,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000007",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000008",
+      "field": "total_frames",
+      "claimed": 97,
+      "actual": 499,
+      "delta": 402,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000008",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000009",
+      "field": "total_frames",
+      "claimed": 107,
+      "actual": 563,
+      "delta": 456,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000009",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000010",
+      "field": "total_frames",
+      "claimed": 159,
+      "actual": 813,
+      "delta": 654,
+      "severity": "low"
+    },
+    {
+      "source": "metadata/clips.json",
+      "clip_id": "clip_000010",
+      "field": "resolution",
+      "claimed": "1920x1080",
+      "actual": "1920x1440",
+      "severity": "medium"
+    }
+  ],
+  "errors": null,
+  "per_file": {
+    "clip_000001": {
+      "file": "clip_000001.mp4",
+      "size_mb": 14.947,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 13.205,
+        "nb_frames": 792,
+        "bitrate_kbps": 9488,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000002": {
+      "file": "clip_000002.mp4",
+      "size_mb": 9.999,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 9.07,
+        "nb_frames": 544,
+        "bitrate_kbps": 9240,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000003": {
+      "file": "clip_000003.mp4",
+      "size_mb": 7.681,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 6.953333,
+        "nb_frames": 417,
+        "bitrate_kbps": 9258,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000004": {
+      "file": "clip_000004.mp4",
+      "size_mb": 7.289,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 6.486667,
+        "nb_frames": 389,
+        "bitrate_kbps": 9418,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000005": {
+      "file": "clip_000005.mp4",
+      "size_mb": 7.829,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 6.953333,
+        "nb_frames": 417,
+        "bitrate_kbps": 9437,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000006": {
+      "file": "clip_000006.mp4",
+      "size_mb": 9.019,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 8.003333,
+        "nb_frames": 480,
+        "bitrate_kbps": 9445,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000007": {
+      "file": "clip_000007.mp4",
+      "size_mb": 11.773,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 10.671667,
+        "nb_frames": 640,
+        "bitrate_kbps": 9246,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000008": {
+      "file": "clip_000008.mp4",
+      "size_mb": 9.153,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 8.32,
+        "nb_frames": 499,
+        "bitrate_kbps": 9221,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000009": {
+      "file": "clip_000009.mp4",
+      "size_mb": 10.34,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 9.386667,
+        "nb_frames": 563,
+        "bitrate_kbps": 9232,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    },
+    "clip_000010": {
+      "file": "clip_000010.mp4",
+      "size_mb": 15.12,
+      "video": {
+        "codec": "hevc",
+        "width": 1920,
+        "height": 1440,
+        "fps": 60.0,
+        "duration_sec": 13.555,
+        "nb_frames": 813,
+        "bitrate_kbps": 9349,
+        "pix_fmt": "yuv420p",
+        "has_audio": false,
+        "audio_codecs": []
+      }
+    }
+  }
+}

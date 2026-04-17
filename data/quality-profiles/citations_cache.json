@@ -71,5 +71,46 @@
     "count": 0,
     "source": "semantic_scholar",
     "fetched_at": "2026-04-16"
-  }
+  },
+  "DexYCB": {
+    "count": 402,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "EgoBody": {
+    "count": 147,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "MECCANO": {
+    "count": 134,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "H2O": {
+    "count": 264,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "Nymeria": {
+    "count": 90,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "GIMO": {
+    "count": 100,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "Assembly101": {
+    "count": 334,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "Aria Digital Twin (ADT)": {
+    "count": 138,
+    "source": "semantic_scholar",
+    "fetched_at": "2026-04-17"
+  },
+  "RoboX EgoGrasp v0.1": null
 }
